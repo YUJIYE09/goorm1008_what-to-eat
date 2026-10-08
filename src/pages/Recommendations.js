@@ -1,4 +1,5 @@
 // 추천 화면: 입력한 조건 + 조건에 맞는 식당 카드 목록
+// v0.3: 카카오 장소 검색으로 실제 식당을 보여주고, 연결 전이거나 실패하면 샘플 식당을 보여줘요.
 import {
   getCurrentGroup,
   getCandidateIds,
@@ -6,7 +7,7 @@ import {
   removeCandidate,
 } from '../services/storage.js';
 import { recommendRestaurants } from '../services/recommendation.js';
-import { restaurants } from '../data/restaurants.js';
+import { getPlaces } from '../services/placeService.js';
 import { RestaurantCard } from '../components/RestaurantCard.js';
 import {
   formatPrice,
@@ -15,7 +16,9 @@ import {
   ATMOSPHERE_LABELS,
 } from '../utils/format.js';
 
-export function Recommendations() {
+let shown = []; // 지금 화면에 보이는 식당들 (후보에 담을 때 정보를 찾으려고)
+
+export async function Recommendations() {
   const group = getCurrentGroup();
 
   // 모임이 없으면 빈 화면 대신 안내를 보여줘요
@@ -29,8 +32,26 @@ export function Recommendations() {
     `;
   }
 
-  const results = recommendRestaurants(restaurants, group); // 점수 높은 순
+  const { source, places, reason } = await getPlaces(group);
   const candidateIds = getCandidateIds(group.id); // 이미 후보에 담은 식당
+
+  const header = `
+      <h1 class="page__title">${escapeHtml(group.name)}</h1>
+      <p class="summary">
+        ${escapeHtml(group.area)} · ${group.people}명 · ${formatPrice(group.budget)}
+      </p>
+      <p class="summary summary--sub">
+        ${CATEGORY_LABELS[group.category]} · ${ATMOSPHERE_LABELS[group.atmosphere]}
+        · <a href="#/create" class="link">조건 변경</a>
+      </p>`;
+
+  if (source === 'kakao') {
+    shown = places;
+    return PlaceList(group, places, candidateIds, header);
+  }
+
+  const results = recommendRestaurants(places, group); // 샘플: 점수 높은 순
+  shown = results;
 
   // 선택한 지역 식당과 다른 지역 식당을 나눠서 보여줘요 (각각 점수 높은 순)
   const sameArea = results.filter((r) => r.matches.area);
@@ -61,17 +82,43 @@ export function Recommendations() {
 
   return `
     <section class="page">
-      <h1 class="page__title">${escapeHtml(group.name)}</h1>
-      <p class="summary">
-        ${group.area} · ${group.people}명 · ${formatPrice(group.budget)}
-      </p>
-      <p class="summary summary--sub">
-        ${CATEGORY_LABELS[group.category]} · ${ATMOSPHERE_LABELS[group.atmosphere]}
-        · <a href="#/create" class="link">조건 변경</a>
-      </p>
+      ${header}
+      <p class="notice">${SAMPLE_NOTICE[reason] ?? SAMPLE_NOTICE.failed}</p>
       ${list}
     </section>
     ${results.length > 0 ? CandidateBar(candidateIds.length) : ''}
+  `;
+}
+
+// 샘플 데이터를 보여주는 이유
+const SAMPLE_NOTICE = {
+  not_configured: '🧪 실제 식당 검색이 아직 연결되지 않아 가상의 샘플 식당을 보여드려요.',
+  offline: '📡 인터넷 연결이 불안정해서 가상의 샘플 식당을 보여드려요.',
+  failed: '⚠️ 실제 식당을 불러오지 못해 가상의 샘플 식당을 보여드려요. 잠시 후 다시 시도해 주세요.',
+};
+
+// 실제 식당 목록 (카카오 검색 결과 순서 = 검색어와 잘 맞는 순)
+function PlaceList(group, places, candidateIds, header) {
+  const where = group.area === '내 주변' ? '내 주변' : `${escapeHtml(group.area)} 근처`;
+  const body =
+    places.length > 0
+      ? `<p class="result-count">${where} 식당 <strong>${places.length}곳</strong> · 반경 2km</p>
+         <p class="hint">가격·평점·영업시간은 카드의 카카오맵 링크에서 확인할 수 있어요.</p>
+         <div class="card-list">${places
+           .map((p) => RestaurantCard(p, { isCandidate: candidateIds.includes(p.id) }))
+           .join('')}</div>`
+      : `<div class="empty">
+           <p><strong>${where}에서 이 종류의 식당을 찾지 못했어요.</strong></p>
+           <p>다른 음식 종류나 지역으로 바꿔보세요.</p>
+           <a href="#/create" class="btn btn--primary">조건 다시 설정</a>
+         </div>`;
+
+  return `
+    <section class="page">
+      ${header}
+      ${body}
+    </section>
+    ${places.length > 0 ? CandidateBar(candidateIds.length) : ''}
   `;
 }
 
@@ -100,7 +147,11 @@ export function mountRecommendations() {
       if (added) {
         removeCandidate(group.id, restaurantId);
       } else {
-        addCandidate(group.id, restaurantId);
+        const restaurant = shown.find((r) => r.id === restaurantId);
+        if (!restaurant) return;
+        // 점수 같은 화면용 값은 빼고 식당 정보만 저장해요
+        const { score, matches, ...info } = restaurant;
+        addCandidate(group.id, info);
       }
 
       // 버튼 모양 바꾸기

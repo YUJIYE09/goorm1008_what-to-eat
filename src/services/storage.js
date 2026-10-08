@@ -79,14 +79,30 @@ export function getCandidateIds(groupId) {
     .map((candidate) => candidate.restaurantId);
 }
 
-// 후보에 추가
-export function addCandidate(groupId, restaurantId) {
+// 이 모임의 후보 식당 정보 목록
+// (실제 식당은 매번 검색 결과가 달라질 수 있어서 담을 때 식당 정보를 함께 저장해요.
+//  예전 버전처럼 id만 저장돼 있으면 fallbackList(샘플 데이터)에서 찾아요)
+export function getCandidates(groupId, fallbackList = []) {
+  return getList(STORAGE_KEYS.candidates)
+    .filter((candidate) => candidate.groupId === groupId)
+    .map(
+      (candidate) =>
+        candidate.restaurant ?? fallbackList.find((r) => r.id === candidate.restaurantId)
+    )
+    .filter(Boolean);
+}
+
+// 후보에 추가 (restaurant: 식당 정보 전체)
+export function addCandidate(groupId, restaurant) {
   const candidates = getList(STORAGE_KEYS.candidates);
   const exists = candidates.some(
-    (c) => c.groupId === groupId && c.restaurantId === restaurantId
+    (c) => c.groupId === groupId && c.restaurantId === restaurant.id
   );
   if (!exists) {
-    saveData(STORAGE_KEYS.candidates, [...candidates, { groupId, restaurantId }]);
+    saveData(STORAGE_KEYS.candidates, [
+      ...candidates,
+      { groupId, restaurantId: restaurant.id, restaurant },
+    ]);
   }
 }
 

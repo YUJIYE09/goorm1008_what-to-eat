@@ -5,6 +5,7 @@
 // 서버와 통신하므로 모든 함수가 시간이 걸릴 수 있어서 async(비동기)예요.
 import { supabase, isOnline } from './supabase.js';
 import * as local from './storage.js';
+import { safePlaceUrl } from '../utils/format.js';
 
 export { isOnline };
 
@@ -30,9 +31,11 @@ function toResponse(row) {
 
 // 후보 식당에서 투표에 필요한 정보만 골라 담기
 // (다른 기기에는 샘플 데이터가 달라질 수 있어서, 식당 정보를 투표 안에 함께 저장해요)
+// v0.3: 실제 식당은 거리·종류·카카오맵 주소도 함께 담아요
 function snapshot(restaurant) {
   const { id, name, rating, pricePerPerson, area, address, category } = restaurant;
-  return { id, name, rating, pricePerPerson, area, address, category };
+  const { categoryName, distance, phone, placeUrl } = restaurant;
+  return { id, name, rating, pricePerPerson, area, address, category, categoryName, distance, phone, placeUrl };
 }
 
 // 투표 만들기 → 만든 투표를 돌려줘요
@@ -135,5 +138,9 @@ export function getVoteOptions(vote, restaurants = []) {
       area: String(c.area ?? ''),
       address: String(c.address ?? ''),
       category: String(c.category ?? ''),
+      categoryName: String(c.categoryName ?? ''),
+      distance: Number(c.distance) || null,
+      phone: String(c.phone ?? ''),
+      placeUrl: safePlaceUrl(c.placeUrl), // 카카오맵 주소가 아니면 빈칸
     }));
 }

@@ -23,6 +23,16 @@ Windows PowerShell에서 `npm`이 막히면 `npm.cmd install`, `npm.cmd run dev`
 
 키가 없으면 예전처럼 이 브라우저(LocalStorage)에만 저장하는 모드로 동작해요.
 
+## 실제 식당 검색 (v0.3, 선택)
+
+카카오 REST API 키를 넣으면 추천 화면에 실제 식당이 나와요. 자세한 방법은 `docs/v0.3-guide.md`.
+
+1. developers.kakao.com에서 앱을 만들고 **카카오맵** 사용 설정 켜기
+2. `.env.local`에 `KAKAO_REST_API_KEY=키` 추가 (VITE_ 없이!)
+3. Vercel 환경 변수에도 같은 이름으로 넣고 Redeploy
+
+키가 없거나 검색이 실패하면 샘플 식당을 보여줘요.
+
 ## Vercel 배포
 
 1. 이 폴더를 GitHub 저장소에 올리기
@@ -46,10 +56,10 @@ Windows PowerShell에서 `npm`이 막히면 `npm.cmd install`, `npm.cmd run dev`
 ## 확장 진행 상황
 
 - [x] v0.2: 투표 링크 공유, 실시간 결과 (Supabase)
-- [ ] v0.3: 실제 식당 검색 (카카오 로컬 API)
+- [x] v0.3: 실제 식당 검색, 내 주변, 거리, 카카오맵 링크 (카카오 로컬 API)
 - [ ] v0.4: AI 자연어 조건 입력
 
 ## 알아둘 점
 
-- 식당은 아직 가상의 샘플 데이터 149곳이에요. 실제 식당은 v0.3에서 연결해요.
+- 카카오 검색은 가격·평점·영업시간을 주지 않아요. 그래서 실제 식당은 거리순 정보와 카카오맵 링크로 보여주고, 예산·분위기 점수는 샘플 식당에서만 계산해요.
 - 로그인이 없어서 투표자는 이름으로만 구분해요.

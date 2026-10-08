@@ -1,7 +1,7 @@
 // 모임 만들기 입력값 검사
 // 문제가 있는 칸만 { 칸이름: '오류 메시지' } 형태로 돌려줘요. 비어 있으면 통과!
 
-import { AREAS, CATEGORY_LABELS, ATMOSPHERE_LABELS } from './format.js';
+import { AREAS, NEAR_ME, CATEGORY_LABELS, ATMOSPHERE_LABELS } from './format.js';
 
 export function validateGroup(values) {
   const errors = {};
@@ -13,7 +13,7 @@ export function validateGroup(values) {
     errors.name = '모임 이름은 30자 이하로 입력해주세요.';
   }
 
-  if (!AREAS.includes(values.area)) {
+  if (!AREAS.includes(values.area) && values.area !== NEAR_ME) {
     errors.area = '지역을 선택해주세요.';
   }
 
