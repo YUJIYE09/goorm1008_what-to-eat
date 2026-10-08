@@ -1,7 +1,7 @@
 // 모임 만들기 입력값 검사
 // 문제가 있는 칸만 { 칸이름: '오류 메시지' } 형태로 돌려줘요. 비어 있으면 통과!
 
-import { AREAS, NEAR_ME, CATEGORY_LABELS, ATMOSPHERE_LABELS } from './format.js';
+import { AREAS, NEAR_ME, AREA_SEARCH, AREA_SEARCH_MAX, CATEGORY_LABELS, ATMOSPHERE_LABELS } from './format.js';
 
 export function validateGroup(values) {
   const errors = {};
@@ -13,7 +13,15 @@ export function validateGroup(values) {
     errors.name = '모임 이름은 30자 이하로 입력해주세요.';
   }
 
-  if (!AREAS.includes(values.area) && values.area !== NEAR_ME) {
+  if (values.area === AREA_SEARCH) {
+    // 직접 검색: 동네나 역 이름을 적었는지 확인
+    const keyword = (values.areaSearch ?? '').trim();
+    if (keyword.length < 2) {
+      errors.area = '검색할 동네나 역 이름을 2글자 이상 입력해주세요.';
+    } else if (keyword.length > AREA_SEARCH_MAX) {
+      errors.area = `검색어는 ${AREA_SEARCH_MAX}자 이하로 입력해주세요.`;
+    }
+  } else if (!AREAS.includes(values.area) && values.area !== NEAR_ME) {
     errors.area = '지역을 선택해주세요.';
   }
 

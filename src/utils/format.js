@@ -4,6 +4,8 @@ export const AREAS = ['홍대', '강남', '성수', '잠실', '종로', '여의�
 
 // 현재 위치 기준으로 찾기 (v0.3)
 export const NEAR_ME = '내 주변';
+export const AREA_SEARCH = '__search'; // 지역 칸에서 "직접 검색"을 고른 경우
+export const AREA_SEARCH_MAX = 20; // 검색어 최대 글자 수
 
 // 저장할 때는 영어 값, 화면에는 한글 이름을 보여줘요
 export const CATEGORY_LABELS = {

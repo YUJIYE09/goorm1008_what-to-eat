@@ -758,3 +758,11 @@ fieldset:disabled .vote-card {
   opacity: 0.4;
   text-decoration: line-through;
 }
+
+/* 지역 직접 검색 칸 (지역에서 "직접 검색"을 고르면 보여요) */
+.area-search {
+  margin-top: var(--space-sm);
+}
+.area-search[hidden] {
+  display: none;
+}
