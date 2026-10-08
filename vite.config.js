@@ -1,8 +1,9 @@
 import { defineConfig, loadEnv } from 'vite';
 import { searchPlaces } from './server/places.js';
+import { parseRequest } from './server/parse.js';
 
-// 개발 서버(npm run dev)에서도 /api/places 가 동작하게 연결해요.
-// (배포하면 같은 일을 api/places.js 가 Vercel에서 해요)
+// 개발 서버(npm run dev)에서도 /api/places, /api/parse 가 동작하게 연결해요.
+// (배포하면 같은 일을 api/ 폴더의 파일들이 Vercel에서 해요)
 function placesApi(env) {
   return {
     name: 'places-api',
@@ -14,6 +15,22 @@ function placesApi(env) {
           result = await searchPlaces(query, env.KAKAO_REST_API_KEY);
         } catch (error) {
           console.error('식당 검색 오류:', error);
+          result = { status: 500, body: { error: 'server_error' } };
+        }
+        res.statusCode = result.status;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.end(JSON.stringify(result.body));
+      });
+
+      // /api/parse: 보낸 글(JSON)을 다 읽은 뒤 AI에게 넘겨요 (v0.4)
+      server.middlewares.use('/api/parse', async (req, res) => {
+        let raw = '';
+        for await (const chunk of req) raw += chunk;
+        let result;
+        try {
+          result = await parseRequest(JSON.parse(raw || '{}'), env.ANTHROPIC_API_KEY);
+        } catch (error) {
+          console.error('AI 조건 정리 오류:', error);
           result = { status: 500, body: { error: 'server_error' } };
         }
         res.statusCode = result.status;

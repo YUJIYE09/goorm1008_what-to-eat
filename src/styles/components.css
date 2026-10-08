@@ -710,3 +710,51 @@ fieldset:disabled .vote-card {
   font-weight: 600;
   color: #fff;
 }
+
+/* ===== 말로 입력하기 (v0.4) ===== */
+.talk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary-light);
+  border-radius: var(--radius-md);
+}
+
+.talk__input {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.talk__result .notice {
+  margin-top: var(--space-sm);
+}
+
+.talk__result ul {
+  margin-top: var(--space-xs);
+}
+
+.talk__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.talk__divider::before,
+.talk__divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--color-border);
+}
+
+/* 고를 수 없는 칩 (못 먹는 음식) */
+.chip:has(input:disabled) {
+  opacity: 0.4;
+  text-decoration: line-through;
+}

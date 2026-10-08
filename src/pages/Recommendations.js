@@ -18,6 +18,27 @@ import {
 
 let shown = []; // 지금 화면에 보이는 식당들 (후보에 담을 때 정보를 찾으려고)
 
+// 못 먹는 음식 종류 → 카카오 업종 이름에서 찾을 단어 (v0.4)
+const AVOID_PATTERNS = {
+  meat: /육류|고기|삼겹|갈비|곱창|막창|한우|족발|보쌈|정육/,
+  chicken: /치킨|닭/,
+  japanese: /일식|초밥|스시|라멘|돈까스|돈카츠|이자카야/,
+  chinese: /중식|중국/,
+  western: /양식|이탈리|피자|스테이크|파스타/,
+  korean: /한식/,
+  cafe: /카페|커피|디저트/,
+};
+
+// 못 먹는 음식이 있는 식당 빼기
+function withoutAvoided(places, avoid = []) {
+  if (!Array.isArray(avoid) || avoid.length === 0) return places;
+  return places.filter(
+    (place) =>
+      !avoid.includes(place.category) &&
+      !avoid.some((key) => AVOID_PATTERNS[key]?.test(place.categoryName ?? ''))
+  );
+}
+
 export async function Recommendations() {
   const group = getCurrentGroup();
 
@@ -32,7 +53,9 @@ export async function Recommendations() {
     `;
   }
 
-  const { source, places, reason } = await getPlaces(group);
+  const result = await getPlaces(group);
+  const { source, reason } = result;
+  const places = withoutAvoided(result.places, group.avoid);
   const candidateIds = getCandidateIds(group.id); // 이미 후보에 담은 식당
 
   const header = `
@@ -42,6 +65,7 @@ export async function Recommendations() {
       </p>
       <p class="summary summary--sub">
         ${CATEGORY_LABELS[group.category]} · ${ATMOSPHERE_LABELS[group.atmosphere]}
+        ${avoidLabel(group.avoid)}
         · <a href="#/create" class="link">조건 변경</a>
       </p>`;
 
@@ -88,6 +112,15 @@ export async function Recommendations() {
     </section>
     ${results.length > 0 ? CandidateBar(candidateIds.length) : ''}
   `;
+}
+
+// "🚫 고기 제외" 표시
+function avoidLabel(avoid) {
+  if (!Array.isArray(avoid) || avoid.length === 0) return '';
+  const names = avoid
+    .filter((key) => key in CATEGORY_LABELS)
+    .map((key) => CATEGORY_LABELS[key].split(' ')[1]);
+  return names.length ? `· 🚫 ${names.join(', ')} 제외` : '';
 }
 
 // 샘플 데이터를 보여주는 이유
