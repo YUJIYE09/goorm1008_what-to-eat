@@ -331,6 +331,27 @@
   border-radius: var(--radius-md);
 }
 
+.card__distance {
+  flex-shrink: 0;
+  padding: 2px var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-md);
+}
+
+/* 실제 식당: 주소·전화는 한 줄씩 */
+.card__meta--place {
+  flex-direction: column;
+  color: var(--color-text-muted);
+}
+
+.card__link {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
 .card__score small {
   margin-left: 2px;
   font-size: var(--font-size-sm);
@@ -662,4 +683,30 @@ fieldset:disabled .vote-card {
 
 .live-hint {
   color: var(--color-success);
+}
+
+/* 화면에는 안 보이고 화면낭독기만 읽는 글자 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 실제 식당 카드는 사진이 없어서 이모지 칸을 얇게 */
+.card__image--compact {
+  aspect-ratio: auto;
+  height: 64px;
+  font-size: 2rem;
+}
+
+/* 결과 화면 1위 상자 안의 카카오맵 링크 (주황 배경 위라 흰 글씨) */
+.place-link {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: #fff;
 }

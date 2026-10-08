@@ -72,6 +72,12 @@ function ResultBody(vote, responses) {
         <p class="winner__label">🏆 ${closed ? '최종 1위' : '현재 1위'}</p>
         <p class="winner__name">${escapeHtml(winners[0].restaurant.name)}</p>
         <p class="winner__desc">${escapeHtml(winners[0].restaurant.address ?? '')}</p>
+        ${
+          winners[0].restaurant.placeUrl
+            ? `<a class="link place-link" href="${winners[0].restaurant.placeUrl}" target="_blank"
+                 rel="noopener noreferrer">카카오맵에서 길찾기·예약 정보 보기 ↗</a>`
+            : ''
+        }
       </div>`;
   }
 

@@ -1,8 +1,9 @@
 // 모임 만들기 화면: 조건을 입력하고 검사한 뒤 저장 → 추천 화면으로 이동
 import { FilterForm } from '../components/FilterForm.js';
 import { validateGroup } from '../utils/validation.js';
-import { formatDate } from '../utils/format.js';
+import { formatDate, NEAR_ME } from '../utils/format.js';
 import { addGroup } from '../services/storage.js';
+import { getMyLocation } from '../services/placeService.js';
 
 export function CreateGroup() {
   return `
@@ -18,7 +19,7 @@ export function CreateGroup() {
 export function mountCreateGroup() {
   const form = document.querySelector('#group-form');
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault(); // 페이지가 새로고침되지 않게 막기
 
     // 폼에 입력된 값 모으기
@@ -48,6 +49,24 @@ export function mountCreateGroup() {
       atmosphere: values.atmosphere,
       createdAt: formatDate(),
     };
+
+    // "내 주변"이면 현재 위치를 물어봐요 (브라우저가 허락 창을 띄워요)
+    if (group.area === NEAR_ME) {
+      const submitButton = form.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      try {
+        const { lat, lng } = await getMyLocation();
+        group.lat = lat;
+        group.lng = lng;
+      } catch {
+        showErrors(form, {
+          area: '현재 위치를 가져오지 못했어요. 위치 권한을 허용하거나 지역을 직접 골라주세요.',
+        });
+        return;
+      } finally {
+        submitButton.disabled = false;
+      }
+    }
 
     // 기존 모임 목록 뒤에 새 모임을 추가해서 저장
     addGroup(group);

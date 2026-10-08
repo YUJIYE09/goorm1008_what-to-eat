@@ -1,5 +1,5 @@
 // 후보 화면: 담은 식당을 확인하고 삭제, 2개 이상이면 투표 만들기
-import { getCurrentGroup, getCandidateIds, removeCandidate } from '../services/storage.js';
+import { getCurrentGroup, getCandidates, removeCandidate } from '../services/storage.js';
 import { createVote, isOnline } from '../services/voteService.js';
 import { restaurants } from '../data/restaurants.js';
 import { CandidateList } from '../components/CandidateList.js';
@@ -21,10 +21,8 @@ export function Candidates() {
     `;
   }
 
-  // 저장된 id로 식당 정보 찾기
-  const candidates = getCandidateIds(group.id)
-    .map((id) => restaurants.find((r) => r.id === id))
-    .filter(Boolean); // 혹시 없는 식당 id가 있으면 빼기
+  // 담아 둔 식당 정보 (예전에 id만 저장했으면 샘플 데이터에서 찾아요)
+  const candidates = getCandidates(group.id, restaurants);
 
   if (candidates.length === 0) {
     return `
@@ -168,9 +166,7 @@ export function mountCandidates() {
         groupId: group.id,
         groupName: group.name,
         title: values.title.trim(),
-        candidates: getCandidateIds(group.id)
-          .map((id) => restaurants.find((r) => r.id === id))
-          .filter(Boolean),
+        candidates: getCandidates(group.id, restaurants),
         deadline: values.deadline,
       });
     } catch (error) {
