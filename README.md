@@ -13,6 +13,16 @@ Windows PowerShell에서 `npm`이 막히면 `npm.cmd install`, `npm.cmd run dev`
 
 배포용 빌드: `npm run build` (결과물은 `dist/` 폴더)
 
+## 서버 연결 (v0.2, 선택)
+
+친구들이 각자 휴대폰에서 투표하려면 Supabase 연결이 필요해요. 자세한 방법은 `docs/v0.2-guide.md`.
+
+1. Supabase SQL Editor에서 `supabase/schema.sql` 실행
+2. `.env.example`을 복사해 `.env.local`을 만들고 URL과 anon 키 입력
+3. Vercel에도 같은 환경 변수 입력 후 Redeploy
+
+키가 없으면 예전처럼 이 브라우저(LocalStorage)에만 저장하는 모드로 동작해요.
+
 ## Vercel 배포
 
 1. 이 폴더를 GitHub 저장소에 올리기
@@ -33,7 +43,13 @@ Windows PowerShell에서 `npm`이 막히면 `npm.cmd install`, `npm.cmd run dev`
 
 단계별 코드 설명은 `docs/phase1-guide.md` ~ `docs/phase8-guide.md`에 있어요.
 
-## 알아둘 점 (MVP의 한계)
+## 확장 진행 상황
 
-- 데이터는 브라우저(LocalStorage)에만 저장돼요. 투표 링크를 다른 사람 기기에서 열 수 있게 하려면 Version 0.2(Supabase)가 필요해요.
-- 식당은 가상의 샘플 데이터 149곳이에요. 실제 식당은 Version 0.3(식당/지도 API)에서 연결해요.
+- [x] v0.2: 투표 링크 공유, 실시간 결과 (Supabase)
+- [ ] v0.3: 실제 식당 검색 (카카오 로컬 API)
+- [ ] v0.4: AI 자연어 조건 입력
+
+## 알아둘 점
+
+- 식당은 아직 가상의 샘플 데이터 149곳이에요. 실제 식당은 v0.3에서 연결해요.
+- 로그인이 없어서 투표자는 이름으로만 구분해요.

@@ -11,7 +11,7 @@ import { CreateGroup, mountCreateGroup } from './pages/CreateGroup.js';
 import { Recommendations, mountRecommendations } from './pages/Recommendations.js';
 import { Candidates, mountCandidates } from './pages/Candidates.js';
 import { Vote, mountVote } from './pages/Vote.js';
-import { Results } from './pages/Results.js';
+import { Results, mountResults } from './pages/Results.js';
 import { NotFound, ErrorPage } from './pages/Fallback.js';
 
 // 주소별로 보여줄 화면 목록
@@ -28,13 +28,23 @@ const routes = {
   },
   '/candidates': { view: Candidates, mount: mountCandidates, title: '최종 후보' },
   '/vote': { view: Vote, mount: mountVote, title: '투표하기' },
-  '/results': { view: Results, title: '투표 결과' },
+  '/results': { view: Results, mount: mountResults, title: '투표 결과' },
 };
 
 const notFoundRoute = { view: NotFound, title: '페이지를 찾을 수 없어요' };
 
 const app = document.querySelector('#app');
 let isFirstRender = true;
+let renderCount = 0; // 화면을 빠르게 여러 번 바꿀 때 늦게 도착한 옛 화면을 무시하려고 세요
+let cleanup = null; // 이전 화면이 남긴 정리 함수 (예: 실시간 구독 끊기)
+
+// 서버에서 데이터를 받아오는 동안 보여줄 로딩 표시
+const Loading = () => `
+  <div class="loading loading--inline" role="status">
+    <span class="loading__spinner" aria-hidden="true"></span>
+    <span>불러오는 중…</span>
+  </div>
+`;
 
 // 화면 틀(머리글 + 본문)에 내용을 채워 넣어요
 function paint(content, title) {
@@ -52,16 +62,28 @@ function paint(content, title) {
   });
 }
 
-function render() {
+async function render() {
   // 예: "#/vote?id=v123" → path "/vote", params { id: 'v123' }
   const [path, query = ''] = (window.location.hash.slice(1) || '/').split('?');
   const params = Object.fromEntries(new URLSearchParams(query));
   const route = routes[path] ?? notFoundRoute; // 없는 주소면 안내 화면
+  const thisRender = ++renderCount;
+
+  // 이전 화면 정리 (실시간 구독 등)
+  cleanup?.();
+  cleanup = null;
 
   try {
-    paint(route.view(params), route.title);
-    route.mount?.(params); // mount가 있는 화면만 실행
+    const result = route.view(params);
+    // 서버에서 데이터를 받아오는 화면(Promise)이면 먼저 로딩 표시
+    if (result instanceof Promise) paint(Loading(), route.title);
+    const content = await result;
+    if (thisRender !== renderCount) return; // 그사이 다른 화면으로 이동했으면 무시
+
+    paint(content, route.title);
+    cleanup = route.mount?.(params) ?? null; // mount가 정리 함수를 돌려주면 보관
   } catch (error) {
+    if (thisRender !== renderCount) return;
     // 오류가 나도 빈 화면 대신 안내를 보여줘요 (명세서 14장)
     console.error('화면을 그리다 오류가 났어요:', error);
     paint(ErrorPage(), '문제가 생겼어요');
