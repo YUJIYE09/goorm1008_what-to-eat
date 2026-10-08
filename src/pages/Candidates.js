@@ -1,10 +1,6 @@
 // 후보 화면: 담은 식당을 확인하고 삭제, 2개 이상이면 투표 만들기
-import {
-  getCurrentGroup,
-  getCandidateIds,
-  removeCandidate,
-  createVote,
-} from '../services/storage.js';
+import { getCurrentGroup, getCandidateIds, removeCandidate } from '../services/storage.js';
+import { createVote, isOnline } from '../services/voteService.js';
 import { restaurants } from '../data/restaurants.js';
 import { CandidateList } from '../components/CandidateList.js';
 import { escapeHtml, toDateTimeLocal } from '../utils/format.js';
@@ -102,9 +98,19 @@ function VoteCreated(vote) {
   return `
     <div class="success">
       <p class="success__title">🎉 투표가 만들어졌어요!</p>
+      <p>${
+        isOnline
+          ? '링크를 단체방에 보내면 친구들이 각자 휴대폰에서 투표할 수 있어요.'
+          : '지금은 이 브라우저에서만 투표할 수 있어요. (서버 연결 전)'
+      }</p>
       <div class="success__actions">
         <a href="#/vote?id=${vote.id}" class="btn btn--primary">투표 페이지 보기</a>
         <button type="button" class="btn btn--secondary" id="copy-link">링크 복사</button>
+        ${
+          isOnline && navigator.share
+            ? '<button type="button" class="btn btn--secondary" id="share-link">공유하기</button>'
+            : ''
+        }
       </div>
       <p class="hint" id="copy-result" aria-live="polite"></p>
     </div>
@@ -134,7 +140,7 @@ export function mountCandidates() {
   });
 
   // "투표 시작하기" → 검사 → 저장 → 완료 안내
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const values = {
       title: form.querySelector('#title').value,
@@ -151,26 +157,67 @@ export function mountCandidates() {
       return;
     }
 
-    const vote = createVote({
-      groupId: group.id,
-      title: values.title.trim(),
-      candidates: getCandidateIds(group.id),
-      deadline: values.deadline,
-    });
+    // 서버에 저장하는 동안 버튼을 잠가서 두 번 눌리지 않게
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = '만드는 중…';
+
+    let vote;
+    try {
+      vote = await createVote({
+        groupId: group.id,
+        groupName: group.name,
+        title: values.title.trim(),
+        candidates: getCandidateIds(group.id)
+          .map((id) => restaurants.find((r) => r.id === id))
+          .filter(Boolean),
+        deadline: values.deadline,
+      });
+    } catch (error) {
+      console.error('투표 만들기 실패:', error);
+      form.querySelector('#deadline-error').textContent =
+        '투표를 만들지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.';
+      submitButton.disabled = false;
+      submitButton.textContent = '투표 시작하기';
+      return;
+    }
 
     form.hidden = true;
     document.querySelector('#vote-created').innerHTML = VoteCreated(vote);
     document.querySelector('#copy-link').addEventListener('click', () => copyVoteLink(vote.id));
+    document
+      .querySelector('#share-link')
+      ?.addEventListener('click', () => shareVoteLink(vote));
   });
+}
+
+// 투표 링크 주소 만들기
+function voteUrl(voteId) {
+  return `${window.location.origin}${window.location.pathname}#/vote?id=${voteId}`;
+}
+
+// 휴대폰 공유 창 열기 (카카오톡, 문자 등으로 바로 보내기)
+async function shareVoteLink(vote) {
+  try {
+    await navigator.share({
+      title: vote.title,
+      text: `🍽️ ${vote.title}\n어디가 좋은지 투표해 주세요!`,
+      url: voteUrl(vote.id),
+    });
+  } catch {
+    // 사용자가 공유 창을 닫은 경우 등은 조용히 넘어가요
+  }
 }
 
 // 투표 링크를 클립보드에 복사
 async function copyVoteLink(voteId) {
-  const url = `${window.location.origin}${window.location.pathname}#/vote?id=${voteId}`;
+  const url = voteUrl(voteId);
   const result = document.querySelector('#copy-result');
   try {
     await navigator.clipboard.writeText(url);
-    result.textContent = '링크를 복사했어요! (지금은 이 브라우저에서만 열려요)';
+    result.textContent = isOnline
+      ? '링크를 복사했어요! 단체방에 붙여넣어 보내세요.'
+      : '링크를 복사했어요! (서버 연결 전이라 이 브라우저에서만 열려요)';
   } catch {
     // 클립보드를 쓸 수 없는 환경이면 링크를 직접 보여줘요
     result.textContent = `이 링크를 복사해 주세요: ${url}`;
