@@ -1,0 +1,55 @@
+/* 앱 전체에 공통으로 적용되는 기본 스타일 */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* 내용 폭을 제한하고 가운데 정렬 (모바일은 양옆 16px 여백) */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+/* 키보드(Tab)로 이동할 때 현재 위치가 잘 보이도록 */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 키보드 사용자를 위한 "본문으로 건너뛰기" 링크: 평소엔 숨어 있다가 Tab을 누르면 나타나요 */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-md);
+  z-index: 100;
+  padding: var(--space-sm) var(--space-md);
+  color: #fff;
+  background: var(--color-text);
+  border-radius: var(--radius-md);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+/* 제목·본문에 프로그램으로 포커스를 옮길 때는 테두리를 그리지 않아요 */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/* 움직임을 줄이도록 설정한 사용자에게는 애니메이션을 끄기 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

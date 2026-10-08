@@ -1,0 +1,40 @@
+/* 디자인 값(색, 글자 크기, 간격)을 한곳에 모아둔 "디자인 사전" */
+:root {
+  /* 색상 */
+  --color-primary: #e8590c; /* 흰 글씨가 잘 읽히는 주황 */
+  --color-primary-dark: #c2410c;
+  --color-primary-light: #fff1eb;
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-bg: #fffaf6;
+  --color-surface: #ffffff;
+  --color-border: #ececec;
+  --color-focus: #2563eb;
+  --color-error: #dc2626;
+  --color-success: #15803d;
+
+  /* 글자 */
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    'Malgun Gothic', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2.25rem;
+
+  /* 간격 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+
+  /* 모양 */
+  --radius-md: 12px;
+  --radius-full: 999px;
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+  /* 크기 */
+  --touch-target: 44px; /* 모바일 터치 최소 크기 */
+  --container-width: 640px;
+}

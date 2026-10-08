@@ -1,0 +1,46 @@
+/* 브라우저마다 다른 기본 스타일을 똑같이 맞춰요 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* hidden 속성이 붙은 요소는 다른 CSS(display: flex 등)보다 우선해서 숨겨요 */
+[hidden] {
+  display: none !important;
+}

@@ -1,0 +1,59 @@
+/* 모바일 우선: 기본 스타일은 모바일용, 화면이 커지면 여기서 덮어써요 */
+
+/* 태블릿 (768px 이상) */
+@media (min-width: 768px) {
+  .home {
+    padding: 80px 0;
+  }
+
+  .home__title {
+    font-size: 3rem;
+  }
+
+  .btn--large {
+    width: auto;
+    min-width: 320px;
+  }
+}
+
+
+/* 식당 카드: 태블릿 이상에서는 2열로 */
+@media (min-width: 768px) {
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 아주 작은 휴대폰 (360px 미만): 인원·예산 칸을 한 줄씩 */
+@media (max-width: 359px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-bar__inner p {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* 데스크톱 (1024px 이상): 넓은 화면에서는 카드 3열 */
+@media (min-width: 1024px) {
+  :root {
+    --container-width: 960px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* 폼·후보·투표·결과처럼 읽고 입력하는 화면은 너무 넓지 않게 */
+  .form,
+  .candidate-list,
+  .result-list,
+  .winner,
+  .success,
+  .page__actions,
+  .page__desc,
+  .notice {
+    max-width: 640px;
+  }
+}

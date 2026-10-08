@@ -1,0 +1,185 @@
+// MVP용 샘플 식당 데이터 (7개 지역 × 7개 음식 종류 × 각 3곳 이상) (실제 식당이 아닌 가상의 식당이에요)
+// category: korean, japanese, chinese, western, meat, chicken, cafe
+// atmosphere: casual, quiet, romantic, group
+
+export const restaurants = [
+  // 홍대
+  { id: 'r001', name: '홍대 고기집', area: '홍대', category: 'meat', pricePerPerson: 28000, rating: 4.6, atmosphere: 'casual', capacity: 8, description: '친구 모임에 적합한 캐주얼한 고깃집', address: '서울 마포구 홍대입구', image: '' },
+  { id: 'r002', name: '연남 한식당', area: '홍대', category: 'korean', pricePerPerson: 24000, rating: 4.5, atmosphere: 'quiet', capacity: 10, description: '정갈한 한상차림을 내는 조용한 한식당', address: '서울 마포구 연남동', image: '' },
+  { id: 'r003', name: '홍대 치킨펍', area: '홍대', category: 'chicken', pricePerPerson: 18000, rating: 4.3, atmosphere: 'group', capacity: 20, description: '단체석이 넓은 치킨 & 맥주 펍', address: '서울 마포구 서교동', image: '' },
+  { id: 'r004', name: '망원 파스타바', area: '홍대', category: 'western', pricePerPerson: 32000, rating: 4.7, atmosphere: 'romantic', capacity: 6, description: '조명이 예쁜 수제 파스타 바', address: '서울 마포구 망원동', image: '' },
+
+  // 강남
+  { id: 'r005', name: '강남 스시오마카세', area: '강남', category: 'japanese', pricePerPerson: 75000, rating: 4.8, atmosphere: 'quiet', capacity: 8, description: '카운터석이 있는 조용한 오마카세', address: '서울 강남구 역삼동', image: '' },
+  { id: 'r006', name: '강남 한우명가', area: '강남', category: 'meat', pricePerPerson: 55000, rating: 4.6, atmosphere: 'group', capacity: 30, description: '룸이 있어 회식하기 좋은 한우집', address: '서울 강남구 논현동', image: '' },
+  { id: 'r007', name: '신논현 마라하우스', area: '강남', category: 'chinese', pricePerPerson: 16000, rating: 4.2, atmosphere: 'casual', capacity: 12, description: '골라 담는 마라탕과 꿔바로우', address: '서울 강남구 역삼동', image: '' },
+  { id: 'r008', name: '강남역 브런치카페', area: '강남', category: 'cafe', pricePerPerson: 19000, rating: 4.4, atmosphere: 'casual', capacity: 10, description: '넓은 창가 자리가 있는 브런치 카페', address: '서울 강남구 강남대로', image: '' },
+
+  // 성수
+  { id: 'r009', name: '성수 화덕피자', area: '성수', category: 'western', pricePerPerson: 26000, rating: 4.5, atmosphere: 'casual', capacity: 12, description: '창고를 개조한 화덕피자 레스토랑', address: '서울 성동구 성수동2가', image: '' },
+  { id: 'r010', name: '서울숲 와인다이닝', area: '성수', category: 'western', pricePerPerson: 58000, rating: 4.7, atmosphere: 'romantic', capacity: 6, description: '서울숲 뷰의 와인 다이닝', address: '서울 성동구 서울숲길', image: '' },
+  { id: 'r011', name: '성수 솥밥집', area: '성수', category: 'korean', pricePerPerson: 17000, rating: 4.4, atmosphere: 'quiet', capacity: 8, description: '1인 솥밥과 정갈한 반찬', address: '서울 성동구 성수동1가', image: '' },
+  { id: 'r012', name: '뚝섬 로스터리', area: '성수', category: 'cafe', pricePerPerson: 12000, rating: 4.6, atmosphere: 'group', capacity: 25, description: '대형 테이블이 있는 로스터리 카페', address: '서울 성동구 뚝섬로', image: '' },
+
+  // 잠실
+  { id: 'r013', name: '잠실 곱창골목', area: '잠실', category: 'meat', pricePerPerson: 25000, rating: 4.3, atmosphere: 'group', capacity: 16, description: '왁자지껄한 분위기의 곱창 전문점', address: '서울 송파구 잠실동', image: '' },
+  { id: 'r014', name: '석촌호수 라멘', area: '잠실', category: 'japanese', pricePerPerson: 13000, rating: 4.5, atmosphere: 'casual', capacity: 6, description: '진한 돈코츠 라멘 전문점', address: '서울 송파구 석촌호수로', image: '' },
+  { id: 'r015', name: '송리단길 비스트로', area: '잠실', category: 'western', pricePerPerson: 35000, rating: 4.4, atmosphere: 'romantic', capacity: 8, description: '아늑한 프렌치 비스트로', address: '서울 송파구 백제고분로', image: '' },
+  { id: 'r016', name: '잠실 딤섬하우스', area: '잠실', category: 'chinese', pricePerPerson: 29000, rating: 4.6, atmosphere: 'group', capacity: 24, description: '원형 테이블이 있는 딤섬 레스토랑', address: '서울 송파구 올림픽로', image: '' },
+
+  // 종로
+  { id: 'r017', name: '종로 한정식', area: '종로', category: 'korean', pricePerPerson: 42000, rating: 4.7, atmosphere: 'quiet', capacity: 20, description: '한옥에서 즐기는 코스 한정식', address: '서울 종로구 인사동', image: '' },
+  { id: 'r018', name: '익선동 이자카야', area: '종로', category: 'japanese', pricePerPerson: 30000, rating: 4.4, atmosphere: 'romantic', capacity: 8, description: '한옥 골목의 감성 이자카야', address: '서울 종로구 익선동', image: '' },
+  { id: 'r019', name: '광장시장 빈대떡', area: '종로', category: 'korean', pricePerPerson: 12000, rating: 4.3, atmosphere: 'casual', capacity: 12, description: '바삭한 빈대떡과 막걸리', address: '서울 종로구 창경궁로', image: '' },
+  { id: 'r020', name: '종로 통닭골목', area: '종로', category: 'chicken', pricePerPerson: 15000, rating: 4.2, atmosphere: 'group', capacity: 30, description: '옛날 통닭과 생맥주', address: '서울 종로구 종로3가', image: '' },
+
+  // 여의도
+  { id: 'r021', name: '여의도 중식당', area: '여의도', category: 'chinese', pricePerPerson: 38000, rating: 4.5, atmosphere: 'quiet', capacity: 20, description: '룸이 있는 고급 중식당', address: '서울 영등포구 여의도동', image: '' },
+  { id: 'r022', name: 'IFC 스테이크하우스', area: '여의도', category: 'western', pricePerPerson: 65000, rating: 4.6, atmosphere: 'romantic', capacity: 10, description: '드라이에이징 스테이크 전문점', address: '서울 영등포구 국제금융로', image: '' },
+  { id: 'r023', name: '여의도 삼겹살회관', area: '여의도', category: 'meat', pricePerPerson: 22000, rating: 4.4, atmosphere: 'group', capacity: 40, description: '직장인 회식 성지 삼겹살집', address: '서울 영등포구 여의대방로', image: '' },
+  { id: 'r024', name: '한강공원 치킨', area: '여의도', category: 'chicken', pricePerPerson: 14000, rating: 4.1, atmosphere: 'casual', capacity: 10, description: '포장해서 한강 가기 좋은 치킨집', address: '서울 영등포구 여의동로', image: '' },
+
+  // 판교
+  { id: 'r025', name: '판교 우동공방', area: '판교', category: 'japanese', pricePerPerson: 11000, rating: 4.5, atmosphere: 'casual', capacity: 8, description: '직접 뽑은 면의 사누키 우동', address: '경기 성남시 분당구 판교역로', image: '' },
+  { id: 'r026', name: '판교 한식뷔페', area: '판교', category: 'korean', pricePerPerson: 15000, rating: 4.0, atmosphere: 'group', capacity: 50, description: '단체 점심에 좋은 한식 뷔페', address: '경기 성남시 분당구 대왕판교로', image: '' },
+  { id: 'r027', name: '백현동 카페거리 디저트', area: '판교', category: 'cafe', pricePerPerson: 14000, rating: 4.6, atmosphere: 'quiet', capacity: 6, description: '조용한 디저트 카페', address: '경기 성남시 분당구 백현동', image: '' },
+  { id: 'r028', name: '판교 양갈비', area: '판교', category: 'meat', pricePerPerson: 34000, rating: 4.7, atmosphere: 'romantic', capacity: 8, description: '숯불에 굽는 양갈비 전문점', address: '경기 성남시 분당구 판교로', image: '' },
+
+  // ===== 지역마다 7가지 음식 종류가 모두 있도록 추가한 식당 =====
+  // 홍대
+  { id: 'r029', name: '홍대 텐동집', area: '홍대', category: 'japanese', pricePerPerson: 14000, rating: 4.5, atmosphere: 'casual', capacity: 6, description: '바삭한 튀김을 올린 텐동 전문점', address: '서울 마포구 와우산로', image: '' },
+  { id: 'r030', name: '연희동 중화요리', area: '홍대', category: 'chinese', pricePerPerson: 21000, rating: 4.6, atmosphere: 'group', capacity: 24, description: '오래된 동네 중국집의 탕수육 맛집', address: '서울 마포구 연희동', image: '' },
+  { id: 'r031', name: '상수 루프탑카페', area: '홍대', category: 'cafe', pricePerPerson: 11000, rating: 4.3, atmosphere: 'romantic', capacity: 10, description: '노을이 예쁜 루프탑 카페', address: '서울 마포구 상수동', image: '' },
+
+  // 강남
+  { id: 'r032', name: '강남 국밥명가', area: '강남', category: 'korean', pricePerPerson: 12000, rating: 4.4, atmosphere: 'casual', capacity: 16, description: '24시간 여는 진한 국밥집', address: '서울 강남구 테헤란로', image: '' },
+  { id: 'r033', name: '가로수길 트라토리아', area: '강남', category: 'western', pricePerPerson: 39000, rating: 4.5, atmosphere: 'romantic', capacity: 8, description: '이탈리아 가정식 트라토리아', address: '서울 강남구 신사동', image: '' },
+  { id: 'r034', name: '논현 치킨클럽', area: '강남', category: 'chicken', pricePerPerson: 20000, rating: 4.3, atmosphere: 'group', capacity: 28, description: '단체 예약이 쉬운 치킨 & 펍', address: '서울 강남구 논현로', image: '' },
+
+  // 성수
+  { id: 'r035', name: '성수 카츠공방', area: '성수', category: 'japanese', pricePerPerson: 16000, rating: 4.6, atmosphere: 'quiet', capacity: 6, description: '두툼한 숙성 돈카츠', address: '서울 성동구 연무장길', image: '' },
+  { id: 'r036', name: '성수 마라샤브', area: '성수', category: 'chinese', pricePerPerson: 27000, rating: 4.3, atmosphere: 'group', capacity: 20, description: '훠궈와 마라 샤브샤브', address: '서울 성동구 아차산로', image: '' },
+  { id: 'r037', name: '성수 숯불갈비', area: '성수', category: 'meat', pricePerPerson: 33000, rating: 4.5, atmosphere: 'casual', capacity: 14, description: '숯불에 구워주는 돼지갈비', address: '서울 성동구 성수이로', image: '' },
+  { id: 'r038', name: '성수 크래프트치킨', area: '성수', category: 'chicken', pricePerPerson: 19000, rating: 4.4, atmosphere: 'casual', capacity: 12, description: '수제 맥주와 함께하는 치킨', address: '서울 성동구 성덕정길', image: '' },
+
+  // 잠실
+  { id: 'r039', name: '잠실 보쌈정식', area: '잠실', category: 'korean', pricePerPerson: 18000, rating: 4.4, atmosphere: 'group', capacity: 30, description: '넓은 좌식 룸이 있는 보쌈집', address: '서울 송파구 송파대로', image: '' },
+  { id: 'r040', name: '방이동 치킨호프', area: '잠실', category: 'chicken', pricePerPerson: 17000, rating: 4.2, atmosphere: 'casual', capacity: 16, description: '먹자골목의 오래된 치킨호프', address: '서울 송파구 방이동', image: '' },
+  { id: 'r041', name: '석촌호수 뷰카페', area: '잠실', category: 'cafe', pricePerPerson: 13000, rating: 4.5, atmosphere: 'romantic', capacity: 8, description: '호수가 보이는 창가 카페', address: '서울 송파구 석촌호수로', image: '' },
+
+  // 종로
+  { id: 'r042', name: '종로 중화반점', area: '종로', category: 'chinese', pricePerPerson: 19000, rating: 4.5, atmosphere: 'casual', capacity: 20, description: '짜장면과 군만두가 유명한 반점', address: '서울 종로구 관철동', image: '' },
+  { id: 'r043', name: '서촌 양식당', area: '종로', category: 'western', pricePerPerson: 31000, rating: 4.6, atmosphere: 'quiet', capacity: 8, description: '한옥을 고친 조용한 경양식집', address: '서울 종로구 서촌', image: '' },
+  { id: 'r044', name: '종로 갈매기살', area: '종로', category: 'meat', pricePerPerson: 21000, rating: 4.3, atmosphere: 'group', capacity: 24, description: '골목 노포 갈매기살 구이', address: '서울 종로구 종로5가', image: '' },
+  { id: 'r045', name: '삼청동 찻집', area: '종로', category: 'cafe', pricePerPerson: 10000, rating: 4.7, atmosphere: 'quiet', capacity: 6, description: '전통차와 다과가 있는 찻집', address: '서울 종로구 삼청동', image: '' },
+
+  // 여의도
+  { id: 'r046', name: '여의도 백반집', area: '여의도', category: 'korean', pricePerPerson: 11000, rating: 4.3, atmosphere: 'casual', capacity: 12, description: '직장인 점심 백반 맛집', address: '서울 영등포구 여의나루로', image: '' },
+  { id: 'r047', name: '여의도 스시바', area: '여의도', category: 'japanese', pricePerPerson: 45000, rating: 4.6, atmosphere: 'quiet', capacity: 8, description: '점심 코스가 있는 스시바', address: '서울 영등포구 국제금융로', image: '' },
+  { id: 'r048', name: '여의도 한강카페', area: '여의도', category: 'cafe', pricePerPerson: 12000, rating: 4.4, atmosphere: 'group', capacity: 30, description: '한강이 보이는 대형 카페', address: '서울 영등포구 여의동로', image: '' },
+
+  // 판교
+  { id: 'r049', name: '판교 차이나키친', area: '판교', category: 'chinese', pricePerPerson: 26000, rating: 4.5, atmosphere: 'group', capacity: 30, description: '룸이 있어 회식하기 좋은 중식당', address: '경기 성남시 분당구 판교역로', image: '' },
+  { id: 'r050', name: '판교 브런치 비스트로', area: '판교', category: 'western', pricePerPerson: 24000, rating: 4.4, atmosphere: 'casual', capacity: 10, description: '샐러드와 파스타가 맛있는 비스트로', address: '경기 성남시 분당구 운중로', image: '' },
+  { id: 'r051', name: '판교 치맥하우스', area: '판교', category: 'chicken', pricePerPerson: 18000, rating: 4.2, atmosphere: 'group', capacity: 24, description: '퇴근길 치맥 단골집', address: '경기 성남시 분당구 대왕판교로', image: '' },
+
+  // ===== 지역 × 음식 종류마다 3곳이 되도록 추가한 식당 =====
+  { id: 'r052', name: '상수 쌈밥정식', area: '홍대', category: 'korean', pricePerPerson: 11000, rating: 4.0, atmosphere: 'group', capacity: 20, description: '신선한 쌈 채소가 무한 리필', address: '서울 마포구 상수', image: '' },
+  { id: 'r053', name: '서교 칼국수집', area: '홍대', category: 'korean', pricePerPerson: 10000, rating: 4.0, atmosphere: 'casual', capacity: 8, description: '손으로 민 칼국수와 보쌈', address: '서울 마포구 서교', image: '' },
+  { id: 'r054', name: '합정 소바집', area: '홍대', category: 'japanese', pricePerPerson: 19000, rating: 4.8, atmosphere: 'group', capacity: 20, description: '메밀 소바와 튀김', address: '서울 마포구 합정', image: '' },
+  { id: 'r055', name: '합정 이자카야', area: '홍대', category: 'japanese', pricePerPerson: 14000, rating: 4.4, atmosphere: 'quiet', capacity: 6, description: '하이볼과 꼬치가 있는 이자카야', address: '서울 마포구 합정', image: '' },
+  { id: 'r056', name: '서교 중식주점', area: '홍대', category: 'chinese', pricePerPerson: 28000, rating: 4.6, atmosphere: 'quiet', capacity: 4, description: '칭따오와 요리가 있는 중식 주점', address: '서울 마포구 서교', image: '' },
+  { id: 'r057', name: '망원 짬뽕집', area: '홍대', category: 'chinese', pricePerPerson: 28000, rating: 4.5, atmosphere: 'casual', capacity: 16, description: '불맛 가득한 짬뽕', address: '서울 마포구 망원', image: '' },
+  { id: 'r058', name: '상수 타코', area: '홍대', category: 'western', pricePerPerson: 44000, rating: 4.4, atmosphere: 'quiet', capacity: 6, description: '멕시칸 타코와 부리또', address: '서울 마포구 상수', image: '' },
+  { id: 'r059', name: '연남 스테이크', area: '홍대', category: 'western', pricePerPerson: 18000, rating: 4.4, atmosphere: 'casual', capacity: 16, description: '합리적인 가격의 스테이크', address: '서울 마포구 연남', image: '' },
+  { id: 'r060', name: '합정 소고기 오마카세', area: '홍대', category: 'meat', pricePerPerson: 49000, rating: 4.3, atmosphere: 'quiet', capacity: 4, description: '코스로 즐기는 한우', address: '서울 마포구 합정', image: '' },
+  { id: 'r061', name: '합정 막창', area: '홍대', category: 'meat', pricePerPerson: 65000, rating: 4.4, atmosphere: 'romantic', capacity: 8, description: '쫄깃한 대구식 막창', address: '서울 마포구 합정', image: '' },
+  { id: 'r062', name: '서교 찜닭', area: '홍대', category: 'chicken', pricePerPerson: 13000, rating: 4.7, atmosphere: 'quiet', capacity: 6, description: '푸짐한 안동찜닭', address: '서울 마포구 서교', image: '' },
+  { id: 'r063', name: '합정 치킨펍', area: '홍대', category: 'chicken', pricePerPerson: 23000, rating: 4.4, atmosphere: 'romantic', capacity: 8, description: '크래프트 맥주와 치킨', address: '서울 마포구 합정', image: '' },
+  { id: 'r064', name: '합정 북카페', area: '홍대', category: 'cafe', pricePerPerson: 14000, rating: 4.1, atmosphere: 'quiet', capacity: 6, description: '책 읽기 좋은 조용한 카페', address: '서울 마포구 합정', image: '' },
+  { id: 'r065', name: '망원 브런치카페', area: '홍대', category: 'cafe', pricePerPerson: 12000, rating: 4.3, atmosphere: 'casual', capacity: 16, description: '샌드위치와 커피', address: '서울 마포구 망원', image: '' },
+  { id: 'r066', name: '논현 순두부집', area: '강남', category: 'korean', pricePerPerson: 23000, rating: 4.7, atmosphere: 'quiet', capacity: 8, description: '직접 만든 순두부찌개', address: '서울 강남구 논현', image: '' },
+  { id: 'r067', name: '선릉 한식주점', area: '강남', category: 'korean', pricePerPerson: 14000, rating: 4.0, atmosphere: 'romantic', capacity: 8, description: '전과 막걸리가 맛있는 한식 주점', address: '서울 강남구 선릉', image: '' },
+  { id: 'r068', name: '청담 스시집', area: '강남', category: 'japanese', pricePerPerson: 28000, rating: 4.2, atmosphere: 'casual', capacity: 12, description: '신선한 숙성회 초밥', address: '서울 강남구 청담', image: '' },
+  { id: 'r069', name: '청담 이자카야', area: '강남', category: 'japanese', pricePerPerson: 19000, rating: 4.5, atmosphere: 'group', capacity: 20, description: '하이볼과 꼬치가 있는 이자카야', address: '서울 강남구 청담', image: '' },
+  { id: 'r070', name: '선릉 딤섬바', area: '강남', category: 'chinese', pricePerPerson: 26000, rating: 4.5, atmosphere: 'quiet', capacity: 4, description: '한입 딤섬과 차', address: '서울 강남구 선릉', image: '' },
+  { id: 'r071', name: '선릉 훠궈', area: '강남', category: 'chinese', pricePerPerson: 14000, rating: 4.2, atmosphere: 'romantic', capacity: 4, description: '진한 육수의 훠궈 전문점', address: '서울 강남구 선릉', image: '' },
+  { id: 'r072', name: '논현 스테이크', area: '강남', category: 'western', pricePerPerson: 15000, rating: 4.0, atmosphere: 'group', capacity: 24, description: '합리적인 가격의 스테이크', address: '서울 강남구 논현', image: '' },
+  { id: 'r073', name: '논현 파스타', area: '강남', category: 'western', pricePerPerson: 52000, rating: 4.2, atmosphere: 'quiet', capacity: 4, description: '생면 파스타 전문점', address: '서울 강남구 논현', image: '' },
+  { id: 'r074', name: '논현 닭갈비', area: '강남', category: 'meat', pricePerPerson: 24000, rating: 4.0, atmosphere: 'casual', capacity: 16, description: '철판 닭갈비와 볶음밥', address: '서울 강남구 논현', image: '' },
+  { id: 'r075', name: '신사 숯불구이', area: '강남', category: 'meat', pricePerPerson: 28000, rating: 4.8, atmosphere: 'quiet', capacity: 4, description: '참숯에 굽는 목살', address: '서울 강남구 신사', image: '' },
+  { id: 'r076', name: '역삼 찜닭', area: '강남', category: 'chicken', pricePerPerson: 16000, rating: 4.4, atmosphere: 'romantic', capacity: 4, description: '푸짐한 안동찜닭', address: '서울 강남구 역삼', image: '' },
+  { id: 'r077', name: '신사 옛날통닭', area: '강남', category: 'chicken', pricePerPerson: 16000, rating: 4.6, atmosphere: 'casual', capacity: 16, description: '가마솥에 튀긴 옛날통닭', address: '서울 강남구 신사', image: '' },
+  { id: 'r078', name: '역삼 브런치카페', area: '강남', category: 'cafe', pricePerPerson: 16000, rating: 4.1, atmosphere: 'romantic', capacity: 8, description: '샌드위치와 커피', address: '서울 강남구 역삼', image: '' },
+  { id: 'r079', name: '논현 베이커리카페', area: '강남', category: 'cafe', pricePerPerson: 12000, rating: 4.0, atmosphere: 'quiet', capacity: 4, description: '갓 구운 빵이 있는 베이커리', address: '서울 강남구 논현', image: '' },
+  { id: 'r080', name: '성수동 순두부집', area: '성수', category: 'korean', pricePerPerson: 25000, rating: 4.7, atmosphere: 'casual', capacity: 8, description: '직접 만든 순두부찌개', address: '서울 성동구 성수동', image: '' },
+  { id: 'r081', name: '연무장 한식주점', area: '성수', category: 'korean', pricePerPerson: 25000, rating: 4.7, atmosphere: 'romantic', capacity: 6, description: '전과 막걸리가 맛있는 한식 주점', address: '서울 성동구 연무장', image: '' },
+  { id: 'r082', name: '연무장 규카츠', area: '성수', category: 'japanese', pricePerPerson: 60000, rating: 4.8, atmosphere: 'romantic', capacity: 4, description: '겉바속촉 규카츠', address: '서울 성동구 연무장', image: '' },
+  { id: 'r083', name: '서울숲 이자카야', area: '성수', category: 'japanese', pricePerPerson: 54000, rating: 4.0, atmosphere: 'group', capacity: 40, description: '하이볼과 꼬치가 있는 이자카야', address: '서울 성동구 서울숲', image: '' },
+  { id: 'r084', name: '서울숲 중식주점', area: '성수', category: 'chinese', pricePerPerson: 10000, rating: 4.6, atmosphere: 'casual', capacity: 10, description: '칭따오와 요리가 있는 중식 주점', address: '서울 성동구 서울숲', image: '' },
+  { id: 'r085', name: '연무장 훠궈', area: '성수', category: 'chinese', pricePerPerson: 37000, rating: 4.7, atmosphere: 'quiet', capacity: 6, description: '진한 육수의 훠궈 전문점', address: '서울 성동구 연무장', image: '' },
+  { id: 'r086', name: '성수동 스테이크', area: '성수', category: 'western', pricePerPerson: 30000, rating: 4.4, atmosphere: 'quiet', capacity: 4, description: '합리적인 가격의 스테이크', address: '서울 성동구 성수동', image: '' },
+  { id: 'r087', name: '연무장 버거하우스', area: '성수', category: 'western', pricePerPerson: 46000, rating: 4.0, atmosphere: 'group', capacity: 24, description: '수제 패티 버거', address: '서울 성동구 연무장', image: '' },
+  { id: 'r088', name: '성수동 닭갈비', area: '성수', category: 'meat', pricePerPerson: 66000, rating: 4.6, atmosphere: 'quiet', capacity: 4, description: '철판 닭갈비와 볶음밥', address: '서울 성동구 성수동', image: '' },
+  { id: 'r089', name: '성수동 곱창', area: '성수', category: 'meat', pricePerPerson: 36000, rating: 4.5, atmosphere: 'romantic', capacity: 8, description: '고소한 소곱창 구이', address: '서울 성동구 성수동', image: '' },
+  { id: 'r090', name: '성수역 닭강정', area: '성수', category: 'chicken', pricePerPerson: 25000, rating: 4.0, atmosphere: 'quiet', capacity: 8, description: '달콤한 수제 닭강정', address: '서울 성동구 성수역', image: '' },
+  { id: 'r091', name: '연무장 바베큐치킨', area: '성수', category: 'chicken', pricePerPerson: 22000, rating: 4.8, atmosphere: 'group', capacity: 24, description: '훈연 바베큐 치킨', address: '서울 성동구 연무장', image: '' },
+  { id: 'r092', name: '연무장 로스터리', area: '성수', category: 'cafe', pricePerPerson: 12000, rating: 4.5, atmosphere: 'romantic', capacity: 4, description: '직접 볶는 스페셜티 커피', address: '서울 성동구 연무장', image: '' },
+  { id: 'r093', name: '서울숲 북카페', area: '성수', category: 'cafe', pricePerPerson: 10000, rating: 4.3, atmosphere: 'quiet', capacity: 4, description: '책 읽기 좋은 조용한 카페', address: '서울 성동구 서울숲', image: '' },
+  { id: 'r094', name: '방이 순두부집', area: '잠실', category: 'korean', pricePerPerson: 19000, rating: 4.6, atmosphere: 'romantic', capacity: 8, description: '직접 만든 순두부찌개', address: '서울 송파구 방이', image: '' },
+  { id: 'r095', name: '방이 감자탕집', area: '잠실', category: 'korean', pricePerPerson: 13000, rating: 4.8, atmosphere: 'quiet', capacity: 8, description: '얼큰한 감자탕과 볶음밥', address: '서울 송파구 방이', image: '' },
+  { id: 'r096', name: '방이 이자카야', area: '잠실', category: 'japanese', pricePerPerson: 57000, rating: 4.3, atmosphere: 'quiet', capacity: 6, description: '하이볼과 꼬치가 있는 이자카야', address: '서울 송파구 방이', image: '' },
+  { id: 'r097', name: '석촌 라멘야', area: '잠실', category: 'japanese', pricePerPerson: 17000, rating: 4.5, atmosphere: 'group', capacity: 20, description: '깊은 국물의 쇼유 라멘', address: '서울 송파구 석촌', image: '' },
+  { id: 'r098', name: '잠실새내 딤섬바', area: '잠실', category: 'chinese', pricePerPerson: 27000, rating: 4.5, atmosphere: 'quiet', capacity: 4, description: '한입 딤섬과 차', address: '서울 송파구 잠실새내', image: '' },
+  { id: 'r099', name: '송리단길 짬뽕집', area: '잠실', category: 'chinese', pricePerPerson: 19000, rating: 3.9, atmosphere: 'romantic', capacity: 4, description: '불맛 가득한 짬뽕', address: '서울 송파구 송리단길', image: '' },
+  { id: 'r100', name: '잠실새내 타코', area: '잠실', category: 'western', pricePerPerson: 48000, rating: 4.7, atmosphere: 'casual', capacity: 8, description: '멕시칸 타코와 부리또', address: '서울 송파구 잠실새내', image: '' },
+  { id: 'r101', name: '석촌 피자펍', area: '잠실', category: 'western', pricePerPerson: 25000, rating: 4.3, atmosphere: 'quiet', capacity: 6, description: '화덕 피자와 맥주', address: '서울 송파구 석촌', image: '' },
+  { id: 'r102', name: '신천 소고기 오마카세', area: '잠실', category: 'meat', pricePerPerson: 19000, rating: 4.1, atmosphere: 'casual', capacity: 12, description: '코스로 즐기는 한우', address: '서울 송파구 신천', image: '' },
+  { id: 'r103', name: '신천 삼겹살', area: '잠실', category: 'meat', pricePerPerson: 33000, rating: 4.5, atmosphere: 'romantic', capacity: 8, description: '두툼한 생삼겹살', address: '서울 송파구 신천', image: '' },
+  { id: 'r104', name: '석촌 치킨', area: '잠실', category: 'chicken', pricePerPerson: 15000, rating: 4.1, atmosphere: 'quiet', capacity: 8, description: '바삭한 후라이드 전문점', address: '서울 송파구 석촌', image: '' },
+  { id: 'r105', name: '석촌 닭강정', area: '잠실', category: 'chicken', pricePerPerson: 20000, rating: 4.5, atmosphere: 'group', capacity: 30, description: '달콤한 수제 닭강정', address: '서울 송파구 석촌', image: '' },
+  { id: 'r106', name: '송리단길 베이커리카페', area: '잠실', category: 'cafe', pricePerPerson: 16000, rating: 4.4, atmosphere: 'group', capacity: 24, description: '갓 구운 빵이 있는 베이커리', address: '서울 송파구 송리단길', image: '' },
+  { id: 'r107', name: '잠실새내 북카페', area: '잠실', category: 'cafe', pricePerPerson: 19000, rating: 4.6, atmosphere: 'casual', capacity: 16, description: '책 읽기 좋은 조용한 카페', address: '서울 송파구 잠실새내', image: '' },
+  { id: 'r108', name: '서촌 한식주점', area: '종로', category: 'korean', pricePerPerson: 20000, rating: 4.1, atmosphere: 'quiet', capacity: 6, description: '전과 막걸리가 맛있는 한식 주점', address: '서울 종로구 서촌', image: '' },
+  { id: 'r109', name: '서촌 쌈밥정식', area: '종로', category: 'korean', pricePerPerson: 11000, rating: 4.5, atmosphere: 'romantic', capacity: 4, description: '신선한 쌈 채소가 무한 리필', address: '서울 종로구 서촌', image: '' },
+  { id: 'r110', name: '광화문 스시집', area: '종로', category: 'japanese', pricePerPerson: 29000, rating: 4.4, atmosphere: 'group', capacity: 30, description: '신선한 숙성회 초밥', address: '서울 종로구 광화문', image: '' },
+  { id: 'r111', name: '서촌 이자카야', area: '종로', category: 'japanese', pricePerPerson: 40000, rating: 3.9, atmosphere: 'quiet', capacity: 6, description: '하이볼과 꼬치가 있는 이자카야', address: '서울 종로구 서촌', image: '' },
+  { id: 'r112', name: '인사동 마라탕', area: '종로', category: 'chinese', pricePerPerson: 22000, rating: 4.1, atmosphere: 'quiet', capacity: 6, description: '재료를 골라 담는 마라탕', address: '서울 종로구 인사동', image: '' },
+  { id: 'r113', name: '인사동 짬뽕집', area: '종로', category: 'chinese', pricePerPerson: 18000, rating: 4.4, atmosphere: 'romantic', capacity: 6, description: '불맛 가득한 짬뽕', address: '서울 종로구 인사동', image: '' },
+  { id: 'r114', name: '광화문 버거하우스', area: '종로', category: 'western', pricePerPerson: 39000, rating: 3.9, atmosphere: 'casual', capacity: 8, description: '수제 패티 버거', address: '서울 종로구 광화문', image: '' },
+  { id: 'r115', name: '광화문 브런치', area: '종로', category: 'western', pricePerPerson: 52000, rating: 4.3, atmosphere: 'romantic', capacity: 6, description: '에그베네딕트 브런치', address: '서울 종로구 광화문', image: '' },
+  { id: 'r116', name: '서촌 소고기 오마카세', area: '종로', category: 'meat', pricePerPerson: 69000, rating: 4.7, atmosphere: 'casual', capacity: 10, description: '코스로 즐기는 한우', address: '서울 종로구 서촌', image: '' },
+  { id: 'r117', name: '광화문 막창', area: '종로', category: 'meat', pricePerPerson: 69000, rating: 4.5, atmosphere: 'quiet', capacity: 4, description: '쫄깃한 대구식 막창', address: '서울 종로구 광화문', image: '' },
+  { id: 'r118', name: '익선동 닭강정', area: '종로', category: 'chicken', pricePerPerson: 19000, rating: 4.4, atmosphere: 'quiet', capacity: 8, description: '달콤한 수제 닭강정', address: '서울 종로구 익선동', image: '' },
+  { id: 'r119', name: '북촌 옛날통닭', area: '종로', category: 'chicken', pricePerPerson: 12000, rating: 4.3, atmosphere: 'romantic', capacity: 8, description: '가마솥에 튀긴 옛날통닭', address: '서울 종로구 북촌', image: '' },
+  { id: 'r120', name: '익선동 북카페', area: '종로', category: 'cafe', pricePerPerson: 16000, rating: 4.1, atmosphere: 'group', capacity: 20, description: '책 읽기 좋은 조용한 카페', address: '서울 종로구 익선동', image: '' },
+  { id: 'r121', name: '서촌 로스터리', area: '종로', category: 'cafe', pricePerPerson: 16000, rating: 4.7, atmosphere: 'romantic', capacity: 8, description: '직접 볶는 스페셜티 커피', address: '서울 종로구 서촌', image: '' },
+  { id: 'r122', name: 'IFC 감자탕집', area: '여의도', category: 'korean', pricePerPerson: 29000, rating: 4.0, atmosphere: 'quiet', capacity: 8, description: '얼큰한 감자탕과 볶음밥', address: '서울 영등포구 IFC', image: '' },
+  { id: 'r123', name: '샛강 한식주점', area: '여의도', category: 'korean', pricePerPerson: 9000, rating: 4.3, atmosphere: 'romantic', capacity: 8, description: '전과 막걸리가 맛있는 한식 주점', address: '서울 영등포구 샛강', image: '' },
+  { id: 'r124', name: '여의도역 규카츠', area: '여의도', category: 'japanese', pricePerPerson: 57000, rating: 4.4, atmosphere: 'romantic', capacity: 6, description: '겉바속촉 규카츠', address: '서울 영등포구 여의도역', image: '' },
+  { id: 'r125', name: '샛강 라멘야', area: '여의도', category: 'japanese', pricePerPerson: 31000, rating: 4.8, atmosphere: 'casual', capacity: 16, description: '깊은 국물의 쇼유 라멘', address: '서울 영등포구 샛강', image: '' },
+  { id: 'r126', name: '여의도역 짬뽕집', area: '여의도', category: 'chinese', pricePerPerson: 23000, rating: 4.1, atmosphere: 'romantic', capacity: 8, description: '불맛 가득한 짬뽕', address: '서울 영등포구 여의도역', image: '' },
+  { id: 'r127', name: 'IFC 중식주점', area: '여의도', category: 'chinese', pricePerPerson: 22000, rating: 4.0, atmosphere: 'group', capacity: 30, description: '칭따오와 요리가 있는 중식 주점', address: '서울 영등포구 IFC', image: '' },
+  { id: 'r128', name: '여의도역 버거하우스', area: '여의도', category: 'western', pricePerPerson: 15000, rating: 4.0, atmosphere: 'quiet', capacity: 8, description: '수제 패티 버거', address: '서울 영등포구 여의도역', image: '' },
+  { id: 'r129', name: '국회 브런치', area: '여의도', category: 'western', pricePerPerson: 40000, rating: 4.2, atmosphere: 'casual', capacity: 8, description: '에그베네딕트 브런치', address: '서울 영등포구 국회', image: '' },
+  { id: 'r130', name: '여의도역 소고기 오마카세', area: '여의도', category: 'meat', pricePerPerson: 28000, rating: 4.5, atmosphere: 'casual', capacity: 8, description: '코스로 즐기는 한우', address: '서울 영등포구 여의도역', image: '' },
+  { id: 'r131', name: '여의도역 숯불구이', area: '여의도', category: 'meat', pricePerPerson: 54000, rating: 4.0, atmosphere: 'romantic', capacity: 4, description: '참숯에 굽는 목살', address: '서울 영등포구 여의도역', image: '' },
+  { id: 'r132', name: '국회 치킨', area: '여의도', category: 'chicken', pricePerPerson: 14000, rating: 4.1, atmosphere: 'group', capacity: 30, description: '바삭한 후라이드 전문점', address: '서울 영등포구 국회', image: '' },
+  { id: 'r133', name: 'IFC 바베큐치킨', area: '여의도', category: 'chicken', pricePerPerson: 25000, rating: 4.8, atmosphere: 'romantic', capacity: 6, description: '훈연 바베큐 치킨', address: '서울 영등포구 IFC', image: '' },
+  { id: 'r134', name: '여의나루 북카페', area: '여의도', category: 'cafe', pricePerPerson: 15000, rating: 4.3, atmosphere: 'romantic', capacity: 6, description: '책 읽기 좋은 조용한 카페', address: '서울 영등포구 여의나루', image: '' },
+  { id: 'r135', name: '여의나루 베이커리카페', area: '여의도', category: 'cafe', pricePerPerson: 11000, rating: 4.3, atmosphere: 'casual', capacity: 12, description: '갓 구운 빵이 있는 베이커리', address: '서울 영등포구 여의나루', image: '' },
+  { id: 'r136', name: '삼평동 비빔밥집', area: '판교', category: 'korean', pricePerPerson: 17000, rating: 4.2, atmosphere: 'romantic', capacity: 4, description: '놋그릇에 담아내는 비빔밥', address: '경기 성남시 분당구 삼평동', image: '' },
+  { id: 'r137', name: '판교역 쌈밥정식', area: '판교', category: 'korean', pricePerPerson: 25000, rating: 4.7, atmosphere: 'casual', capacity: 16, description: '신선한 쌈 채소가 무한 리필', address: '경기 성남시 분당구 판교역', image: '' },
+  { id: 'r138', name: '삼평동 돈부리', area: '판교', category: 'japanese', pricePerPerson: 47000, rating: 4.1, atmosphere: 'quiet', capacity: 4, description: '연어·장어 덮밥 전문점', address: '경기 성남시 분당구 삼평동', image: '' },
+  { id: 'r139', name: '운중동 이자카야', area: '판교', category: 'japanese', pricePerPerson: 35000, rating: 4.1, atmosphere: 'romantic', capacity: 8, description: '하이볼과 꼬치가 있는 이자카야', address: '경기 성남시 분당구 운중동', image: '' },
+  { id: 'r140', name: '서판교 딤섬바', area: '판교', category: 'chinese', pricePerPerson: 22000, rating: 4.1, atmosphere: 'casual', capacity: 12, description: '한입 딤섬과 차', address: '경기 성남시 분당구 서판교', image: '' },
+  { id: 'r141', name: '백현동 훠궈', area: '판교', category: 'chinese', pricePerPerson: 13000, rating: 4.1, atmosphere: 'quiet', capacity: 6, description: '진한 육수의 훠궈 전문점', address: '경기 성남시 분당구 백현동', image: '' },
+  { id: 'r142', name: '판교역 브런치', area: '판교', category: 'western', pricePerPerson: 15000, rating: 4.3, atmosphere: 'quiet', capacity: 8, description: '에그베네딕트 브런치', address: '경기 성남시 분당구 판교역', image: '' },
+  { id: 'r143', name: '판교역 피자펍', area: '판교', category: 'western', pricePerPerson: 48000, rating: 4.7, atmosphere: 'group', capacity: 40, description: '화덕 피자와 맥주', address: '경기 성남시 분당구 판교역', image: '' },
+  { id: 'r144', name: '서판교 곱창', area: '판교', category: 'meat', pricePerPerson: 22000, rating: 4.7, atmosphere: 'group', capacity: 40, description: '고소한 소곱창 구이', address: '경기 성남시 분당구 서판교', image: '' },
+  { id: 'r145', name: '판교역 숯불구이', area: '판교', category: 'meat', pricePerPerson: 30000, rating: 4.4, atmosphere: 'casual', capacity: 12, description: '참숯에 굽는 목살', address: '경기 성남시 분당구 판교역', image: '' },
+  { id: 'r146', name: '서판교 닭강정', area: '판교', category: 'chicken', pricePerPerson: 19000, rating: 4.5, atmosphere: 'romantic', capacity: 4, description: '달콤한 수제 닭강정', address: '경기 성남시 분당구 서판교', image: '' },
+  { id: 'r147', name: '서판교 옛날통닭', area: '판교', category: 'chicken', pricePerPerson: 18000, rating: 4.1, atmosphere: 'casual', capacity: 12, description: '가마솥에 튀긴 옛날통닭', address: '경기 성남시 분당구 서판교', image: '' },
+  { id: 'r148', name: '운중동 티룸', area: '판교', category: 'cafe', pricePerPerson: 12000, rating: 4.3, atmosphere: 'group', capacity: 24, description: '홍차와 스콘이 있는 티룸', address: '경기 성남시 분당구 운중동', image: '' },
+  { id: 'r149', name: '삼평동 브런치카페', area: '판교', category: 'cafe', pricePerPerson: 9000, rating: 3.9, atmosphere: 'romantic', capacity: 8, description: '샌드위치와 커피', address: '경기 성남시 분당구 삼평동', image: '' },
+];
