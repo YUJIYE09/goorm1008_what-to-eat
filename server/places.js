@@ -24,6 +24,7 @@ const CATEGORY_QUERIES = {
   cafe: '카페',
 };
 
+const AREA_SEARCH_MAX = 20; // 직접 검색한 동네 이름 최대 글자 수
 const SEARCH_RADIUS = 2000; // 중심에서 2km 안
 const PAGES = 2; // 한 번에 15곳 × 2쪽 = 최대 30곳
 
@@ -49,6 +50,24 @@ function toPlace(doc, { area, category }) {
   };
 }
 
+// 동네·역 이름 → 중심 좌표 (카카오 검색 결과 첫 번째 장소)
+async function findCenter(keyword, apiKey) {
+  const params = new URLSearchParams({ query: keyword, size: '1' });
+  const response = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?${params}`, {
+    headers: { Authorization: `KakaoAK ${apiKey}` },
+  });
+  if (!response.ok) {
+    console.error('카카오 지역 검색 실패:', response.status, await response.text());
+    return { status: 502, error: 'kakao_failed' };
+  }
+  const data = await response.json();
+  const doc = data.documents[0];
+  const lat = Number(doc?.y);
+  const lng = Number(doc?.x);
+  if (!doc || !isInKorea(lat, lng)) return { status: 404, error: 'area_not_found' };
+  return { center: { lat, lng } };
+}
+
 // 요청 주소의 값(query)을 받아 검색하고 { status, body }를 돌려줘요
 export async function searchPlaces(query, apiKey) {
   if (!apiKey) {
@@ -71,7 +90,14 @@ export async function searchPlaces(query, apiKey) {
   } else if (AREA_CENTERS[area]) {
     center = AREA_CENTERS[area];
   } else {
-    return { status: 400, body: { error: 'bad_area' } };
+    // 직접 검색한 동네·역 이름 (예: "을지로3가역") → 카카오에서 그 장소의 좌표를 찾아요
+    area = area.trim();
+    if (area.length < 2 || area.length > AREA_SEARCH_MAX) {
+      return { status: 400, body: { error: 'bad_area' } };
+    }
+    const found = await findCenter(area, apiKey);
+    if (found.error) return { status: found.status, body: { error: found.error } };
+    center = found.center;
   }
 
   const places = [];

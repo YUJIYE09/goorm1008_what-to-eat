@@ -1,5 +1,5 @@
 // 모임 조건 입력 폼의 HTML을 만들어요 (이벤트 연결은 CreateGroup.js에서)
-import { AREAS, NEAR_ME, CATEGORY_LABELS, ATMOSPHERE_LABELS } from '../utils/format.js';
+import { AREAS, NEAR_ME, AREA_SEARCH, AREA_SEARCH_MAX, CATEGORY_LABELS, ATMOSPHERE_LABELS } from '../utils/format.js';
 
 // 칸 아래에 보여줄 오류 메시지 자리 (처음엔 비어 있음)
 function errorSlot(name) {
@@ -45,7 +45,11 @@ export function FilterForm() {
           <option value="">지역을 선택하세요</option>
           <option value="${NEAR_ME}">📍 내 주변 (현재 위치)</option>
           ${areaOptions}
+          <option value="${AREA_SEARCH}">🔍 직접 검색 (다른 동네·역)</option>
         </select>
+        <input class="input area-search" id="area-search" name="areaSearch" type="search"
+          maxlength="${AREA_SEARCH_MAX}" placeholder="예: 을지로3가역, 연남동, 부산 서면"
+          aria-label="검색할 동네나 역 이름" aria-describedby="area-error" hidden />
         ${errorSlot('area')}
       </div>
 

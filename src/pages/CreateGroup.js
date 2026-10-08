@@ -1,7 +1,7 @@
 // 모임 만들기 화면: 조건을 입력하고 검사한 뒤 저장 → 추천 화면으로 이동
 import { FilterForm } from '../components/FilterForm.js';
 import { validateGroup } from '../utils/validation.js';
-import { formatDate, escapeHtml, NEAR_ME, CATEGORY_LABELS } from '../utils/format.js';
+import { formatDate, escapeHtml, NEAR_ME, AREA_SEARCH, CATEGORY_LABELS } from '../utils/format.js';
 import { addGroup } from '../services/storage.js';
 import { getMyLocation } from '../services/placeService.js';
 import { parseConditions } from '../services/aiService.js';
@@ -100,6 +100,7 @@ export function mountCreateGroup() {
   const form = document.querySelector('#group-form');
   avoidList = [];
   mountTalk(form);
+  mountAreaSearch(form);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault(); // 페이지가 새로고침되지 않게 막기
@@ -109,6 +110,7 @@ export function mountCreateGroup() {
     const values = {
       name: formData.get('name') ?? '',
       area: formData.get('area') ?? '',
+      areaSearch: formData.get('areaSearch') ?? '',
       people: formData.get('people') ?? '',
       budget: formData.get('budget') ?? '',
       category: formData.get('category') ?? '',
@@ -124,7 +126,8 @@ export function mountCreateGroup() {
     const group = {
       id: `g${Date.now()}`,
       name: values.name.trim(),
-      area: values.area,
+      // 직접 검색이면 적은 동네·역 이름이 지역이 돼요 (예: "을지로3가역")
+      area: values.area === AREA_SEARCH ? values.areaSearch.trim() : values.area,
       people: Number(values.people),
       budget: Number(values.budget),
       category: values.category,
@@ -155,6 +158,17 @@ export function mountCreateGroup() {
     addGroup(group);
 
     window.location.hash = '/recommendations';
+  });
+}
+
+// 지역에서 "직접 검색"을 고르면 검색 칸을 보여줘요
+function mountAreaSearch(form) {
+  const select = form.querySelector('#area');
+  const input = form.querySelector('#area-search');
+  select.addEventListener('change', () => {
+    const searching = select.value === AREA_SEARCH;
+    input.hidden = !searching;
+    if (searching) input.focus();
   });
 }
 

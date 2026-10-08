@@ -94,8 +94,8 @@ export async function Recommendations() {
       ? `<p class="result-count">조건에 맞는 식당 <strong>${results.length}곳</strong> · 추천 점수 높은 순</p>
          ${
            sameArea.length > 0
-             ? section(`📍 ${group.area} 추천`, sameArea)
-             : `<p class="notice">${group.area}에는 조건에 맞는 식당이 없어서 다른 지역을 보여드려요.</p>`
+             ? section(`📍 ${escapeHtml(group.area)} 추천`, sameArea)
+             : `<p class="notice">${escapeHtml(group.area)}에는 조건에 맞는 식당이 없어서 다른 지역을 보여드려요.</p>`
          }
          ${section('🚶 다른 지역 추천', otherArea)}`
       : `<div class="empty">
@@ -125,6 +125,7 @@ function avoidLabel(avoid) {
 
 // 샘플 데이터를 보여주는 이유
 const SAMPLE_NOTICE = {
+  area_not_found: '🔍 검색한 동네를 찾지 못해 가상의 샘플 식당을 보여드려요. "조건 변경"에서 역 이름처럼 더 정확하게 입력해 보세요.',
   not_configured: '🧪 실제 식당 검색이 아직 연결되지 않아 가상의 샘플 식당을 보여드려요.',
   offline: '📡 인터넷 연결이 불안정해서 가상의 샘플 식당을 보여드려요.',
   failed: '⚠️ 실제 식당을 불러오지 못해 가상의 샘플 식당을 보여드려요. 잠시 후 다시 시도해 주세요.',
