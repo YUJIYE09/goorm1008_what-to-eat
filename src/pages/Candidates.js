@@ -3,7 +3,7 @@ import { getCurrentGroup, getCandidates, removeCandidate } from '../services/sto
 import { createVote, isOnline } from '../services/voteService.js';
 import { restaurants } from '../data/restaurants.js';
 import { CandidateList } from '../components/CandidateList.js';
-import { escapeHtml, toDateTimeLocal } from '../utils/format.js';
+import { escapeHtml, toDateTimeLocal, formatDeadline } from '../utils/format.js';
 import { validateVote } from '../utils/validation.js';
 
 const MIN_CANDIDATES = 2; // 투표를 만들 수 있는 최소 후보 수
@@ -192,12 +192,18 @@ function voteUrl(voteId) {
   return `${window.location.origin}${window.location.pathname}#/vote?id=${voteId}`;
 }
 
+// 공유할 때 함께 보낼 글 (후보 이름과 마감 시간을 보여줘서 열기 전에도 알 수 있게)
+function shareText(vote) {
+  const names = (vote.candidates ?? []).map((c) => `· ${c.name}`).join('\n');
+  return `🍽️ ${vote.title}\n${names}\n⏰ ${formatDeadline(vote.deadline)}까지 투표해 주세요!`;
+}
+
 // 휴대폰 공유 창 열기 (카카오톡, 문자 등으로 바로 보내기)
 async function shareVoteLink(vote) {
   try {
     await navigator.share({
       title: vote.title,
-      text: `🍽️ ${vote.title}\n어디가 좋은지 투표해 주세요!`,
+      text: shareText(vote),
       url: voteUrl(vote.id),
     });
   } catch {
