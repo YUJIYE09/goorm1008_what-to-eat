@@ -35,7 +35,7 @@ export const DEFAULT_RADIUS = 2000;
 
 // 실제 식당 정렬 (카카오 검색이 지원하는 두 가지)
 export const SORT_LABELS = {
-  accuracy: '⭐ 추천 순',
+  accuracy: '🔎 정확도 순',
   distance: '📍 가까운 순',
 };
 export const DEFAULT_SORT = 'accuracy';

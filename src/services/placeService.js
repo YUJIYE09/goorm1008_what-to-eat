@@ -13,7 +13,7 @@ export async function getPlaces(group) {
     area: group.area,
     category: groupCategories(group).join(','),
     atmosphere: group.atmosphere ?? '', // 분위기는 검색어에 섞어서 비슷하게 찾아요
-    sort: group.sort ?? DEFAULT_SORT, // 추천 순(accuracy) / 가까운 순(distance)
+    sort: group.sort ?? DEFAULT_SORT, // 정확도 순(accuracy) / 가까운 순(distance)
     radius: String(group.radius ?? DEFAULT_RADIUS), // 검색 거리 (m)
   });
   if (group.lat && group.lng) {

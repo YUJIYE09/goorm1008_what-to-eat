@@ -35,7 +35,7 @@ const ATMOSPHERE_WORDS = {
 const AREA_SEARCH_MAX = 20; // 직접 검색한 동네 이름 최대 글자 수
 const RADIUS_OPTIONS = [500, 1000, 2000]; // 고를 수 있는 거리 (m)
 const DEFAULT_RADIUS = 2000; // 거리를 안 골랐으면 2km 안
-const SORTS = ['accuracy', 'distance']; // 카카오 정렬: 추천(검색어와 잘 맞는) 순 / 가까운 순
+const SORTS = ['accuracy', 'distance']; // 카카오 정렬: 정확도(검색어와 잘 맞는) 순 / 가까운 순
 const PAGES = 2; // 한 번에 15곳 × 2쪽 = 최대 30곳
 
 // 한국 안의 좌표인지 대략 확인 (아무 좌표나 넣어 남의 키를 쓰지 못하게)
@@ -114,7 +114,7 @@ export async function searchPlaces(query, apiKey) {
   // 검색 거리 (정해진 값이 아니면 2km)
   const radius = RADIUS_OPTIONS.includes(Number(query.radius)) ? Number(query.radius) : DEFAULT_RADIUS;
 
-  // 정렬 (정해진 값이 아니면 추천 순)
+  // 정렬 (정해진 값이 아니면 정확도 순)
   const sort = SORTS.includes(query.sort) ? query.sort : 'accuracy';
 
   // 검색어 앞에 붙일 분위기 단어 (없거나 모르는 값이면 붙이지 않아요)
@@ -134,7 +134,7 @@ export async function searchPlaces(query, apiKey) {
 
 // 종류별 검색 결과를 한 목록으로 합쳐요 (같은 식당은 한 번만)
 // - 가까운 순: 전부 거리순으로
-// - 추천 순: 분위기 검색에 나온 곳 먼저, 그다음 종류별로 번갈아 하나씩 (한식1, 고기1, 한식2, ...)
+// - 정확도 순: 분위기 검색에 나온 곳 먼저, 그다음 종류별로 번갈아 하나씩 (한식1, 고기1, 한식2, ...)
 function combine(lists, sort) {
   const seen = new Set();
   const unique = (list) => list.filter((place) => !seen.has(place.id) && seen.add(place.id));
@@ -185,7 +185,7 @@ async function searchKeyword({ keyword, category, center, area, pages, radius, s
       x: String(center.lng),
       y: String(center.lat),
       radius: String(radius),
-      sort, // accuracy(추천 순) 또는 distance(가까운 순)
+      sort, // accuracy(정확도 순) 또는 distance(가까운 순)
       size: '15',
       page: String(page),
     });
