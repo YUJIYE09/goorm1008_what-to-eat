@@ -41,8 +41,8 @@ function fillForm(form, conditions) {
   setValue('people', conditions.people);
   setValue('budget', conditions.budget);
   ['category', 'atmosphere'].forEach((name) => {
-    const radio = form.querySelector(`[name="${name}"][value="${conditions[name]}"]`);
-    if (radio) radio.checked = true;
+    const input = form.querySelector(`[name="${name}"][value="${conditions[name]}"]`);
+    if (input) input.checked = true;
   });
   // 못 먹는 음식은 고를 수 없게 해요
   form.querySelectorAll('[name="category"]').forEach((radio) => {
@@ -113,7 +113,7 @@ export function mountCreateGroup() {
       areaSearch: formData.get('areaSearch') ?? '',
       people: formData.get('people') ?? '',
       budget: formData.get('budget') ?? '',
-      category: formData.get('category') ?? '',
+      category: formData.getAll('category'), // 여러 개 선택 (예: ['korean', 'meat'])
       atmosphere: formData.get('atmosphere') ?? '',
     };
 
@@ -130,10 +130,11 @@ export function mountCreateGroup() {
       area: values.area === AREA_SEARCH ? values.areaSearch.trim() : values.area,
       people: Number(values.people),
       budget: Number(values.budget),
-      category: values.category,
+      categories: values.category,
+      category: values.category[0], // 예전 코드와 맞추기 위한 첫 번째 종류
       atmosphere: values.atmosphere,
       createdAt: formatDate(),
-      avoid: avoidList.filter((c) => c !== values.category), // 못 먹는 음식 (v0.4)
+      avoid: avoidList.filter((c) => !values.category.includes(c)), // 못 먹는 음식 (v0.4)
     };
 
     // "내 주변"이면 현재 위치를 물어봐요 (브라우저가 허락 창을 띄워요)

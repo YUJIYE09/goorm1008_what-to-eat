@@ -3,6 +3,8 @@
 // 2) 점수 계산하기 (scoreRestaurant)
 // 3) 점수 높은 순으로 정렬하기 (recommendRestaurants)
 
+import { groupCategories } from '../utils/format.js';
+
 // 명세서 8.1 점수표 (최대 100점)
 export const SCORE_RULES = {
   area: 30, // 지역 일치
@@ -27,7 +29,7 @@ export function filterRestaurants(restaurants, group) {
 export function scoreRestaurant(restaurant, group) {
   const matches = {
     area: restaurant.area === group.area,
-    category: restaurant.category === group.category,
+    category: groupCategories(group).includes(restaurant.category), // 고른 종류 중 하나면 일치
     budget: restaurant.pricePerPerson <= group.budget,
     atmosphere: restaurant.atmosphere === group.atmosphere,
     rating: restaurant.rating >= 4.5,

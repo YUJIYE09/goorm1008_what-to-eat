@@ -14,6 +14,7 @@ import {
   escapeHtml,
   CATEGORY_LABELS,
   ATMOSPHERE_LABELS,
+  groupCategories,
 } from '../utils/format.js';
 
 let shown = []; // 지금 화면에 보이는 식당들 (후보에 담을 때 정보를 찾으려고)
@@ -64,7 +65,7 @@ export async function Recommendations() {
         ${escapeHtml(group.area)} · ${group.people}명 · ${formatPrice(group.budget)}
       </p>
       <p class="summary summary--sub">
-        ${CATEGORY_LABELS[group.category]} · ${ATMOSPHERE_LABELS[group.atmosphere]}
+        ${groupCategories(group).map((key) => CATEGORY_LABELS[key]).join(', ')} · ${ATMOSPHERE_LABELS[group.atmosphere]}
         ${avoidLabel(group.avoid)}
         · <a href="#/create" class="link">조건 변경</a>
       </p>`;
@@ -137,7 +138,12 @@ function PlaceList(group, places, candidateIds, header) {
   const body =
     places.length > 0
       ? `<p class="result-count">${where} 식당 <strong>${places.length}곳</strong> · 반경 2km</p>
-         <p class="hint">가격·평점·영업시간은 카드의 카카오맵 링크에서 확인할 수 있어요.</p>
+         ${
+           places.some((p) => p.moodMatch)
+             ? `<p class="hint">✨ 표시는 "${ATMOSPHERE_LABELS[group.atmosphere]}" 분위기를 검색어에 넣어 찾은 식당이에요. 앞쪽에 먼저 보여드려요.</p>`
+             : ''
+         }
+         <p class="hint">💰 1인 예산 ${formatPrice(group.budget)}: 카카오는 가격을 알려주지 않아서, 가격·평점·영업시간은 카드의 카카오맵 링크에서 확인해 주세요.</p>
          <div class="card-list">${places
            .map((p) => RestaurantCard(p, { isCandidate: candidateIds.includes(p.id) }))
            .join('')}</div>`

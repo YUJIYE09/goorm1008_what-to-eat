@@ -6,13 +6,14 @@ function errorSlot(name) {
   return `<p class="field__error" id="${name}-error" aria-live="polite"></p>`;
 }
 
-// 동그라미 버튼(radio) 묶음을 "칩" 모양으로 만들기
-function chipGroup(name, legend, labels) {
+// 버튼 묶음을 "칩" 모양으로 만들기
+// multiple이 true면 여러 개 고를 수 있는 checkbox, 아니면 하나만 고르는 radio
+function chipGroup(name, legend, labels, { multiple = false } = {}) {
   const chips = Object.entries(labels)
     .map(
       ([value, label]) => `
         <label class="chip">
-          <input type="radio" name="${name}" value="${value}" />
+          <input type="${multiple ? 'checkbox' : 'radio'}" name="${name}" value="${value}" />
           <span>${label}</span>
         </label>`
     )
@@ -20,7 +21,7 @@ function chipGroup(name, legend, labels) {
 
   return `
     <fieldset class="field" aria-describedby="${name}-error">
-      <legend class="field__label">${legend}</legend>
+      <legend class="field__label">${legend}${multiple ? ' <span class="field__hint">(여러 개 선택 가능)</span>' : ''}</legend>
       <div class="chip-group">${chips}</div>
       ${errorSlot(name)}
     </fieldset>
@@ -70,7 +71,7 @@ export function FilterForm() {
         </div>
       </div>
 
-      ${chipGroup('category', '음식 종류', CATEGORY_LABELS)}
+      ${chipGroup('category', '음식 종류', CATEGORY_LABELS, { multiple: true })}
       ${chipGroup('atmosphere', '분위기', ATMOSPHERE_LABELS)}
 
       <button type="submit" class="btn btn--primary btn--large">식당 추천 받기</button>
