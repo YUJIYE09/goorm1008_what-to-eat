@@ -779,3 +779,13 @@ fieldset:disabled .vote-card {
   color: var(--color-primary-dark);
   background: var(--color-primary-light);
 }
+
+/* 후보·투표 화면의 카카오맵 링크 (별점은 카카오맵에서 확인) */
+.place-mini-link {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+.vote-option .place-mini-link {
+  margin-left: var(--space-md);
+}

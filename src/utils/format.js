@@ -92,3 +92,12 @@ export function restaurantMeta(restaurant) {
 export function safePlaceUrl(url) {
   return /^https?:\/\/place\.map\.kakao\.com\/\d+$/.test(String(url ?? '')) ? url : '';
 }
+
+// 카카오맵 상세 페이지 링크 (별점·메뉴·영업시간 확인용). 실제 식당이 아니면 빈칸
+export function placeLink(restaurant) {
+  const url = safePlaceUrl(restaurant.placeUrl);
+  if (!url) return '';
+  return `<a class="link place-mini-link" href="${url}" target="_blank" rel="noopener noreferrer">
+      ⭐ 카카오맵에서 별점·메뉴 보기<span class="visually-hidden"> (${escapeHtml(restaurant.name)}, 새 창)</span> ↗
+    </a>`;
+}
