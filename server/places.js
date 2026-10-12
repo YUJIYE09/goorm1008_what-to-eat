@@ -33,7 +33,9 @@ const ATMOSPHERE_WORDS = {
 };
 
 const AREA_SEARCH_MAX = 20; // 직접 검색한 동네 이름 최대 글자 수
-const SEARCH_RADIUS = 2000; // 중심에서 2km 안
+const RADIUS_OPTIONS = [500, 1000, 2000]; // 고를 수 있는 거리 (m)
+const DEFAULT_RADIUS = 2000; // 거리를 안 골랐으면 2km 안
+const GROUP_SEAT_PEOPLE = 8; // 이 인원 이상이면 단체석 있는 곳을 먼저 찾아요
 const PAGES = 2; // 한 번에 15곳 × 2쪽 = 최대 30곳
 
 // 한국 안의 좌표인지 대략 확인 (아무 좌표나 넣어 남의 키를 쓰지 못하게)
@@ -109,14 +111,19 @@ export async function searchPlaces(query, apiKey) {
     center = found.center;
   }
 
-  // 분위기 단어 (없거나 모르는 값이면 붙이지 않아요)
-  const mood = ATMOSPHERE_WORDS[String(query.atmosphere ?? '')] ?? '';
+  // 검색 거리 (정해진 값이 아니면 2km)
+  const radius = RADIUS_OPTIONS.includes(Number(query.radius)) ? Number(query.radius) : DEFAULT_RADIUS;
+
+  // 검색어 앞에 붙일 말: 분위기 단어 + 인원이 많으면 "단체" (중복은 한 번만)
+  const moods = [ATMOSPHERE_WORDS[String(query.atmosphere ?? '')]];
+  if (Number(query.people) >= GROUP_SEAT_PEOPLE) moods.push('단체');
+  const moodWords = [...new Set(moods.filter(Boolean))];
 
   // 종류가 하나면 2쪽(최대 30곳), 여러 개면 종류마다 1쪽(15곳)씩 검색해요
   const pages = categories.length === 1 ? PAGES : 1;
   const places = [];
   for (const category of categories) {
-    const result = await searchCategory({ category, center, area, pages, mood, apiKey });
+    const result = await searchCategory({ category, center, area, pages, moodWords, radius, apiKey });
     if (result.error) return { status: 502, body: { error: result.error } };
     places.push(...result.places);
   }
@@ -134,23 +141,30 @@ export async function searchPlaces(query, apiKey) {
 }
 
 // 음식 종류 하나를 카카오에서 검색해요
-// 분위기 단어가 있으면 "조용한 한식"으로 먼저 찾고(앞에 보여줘요), 이어서 "한식"으로 찾아 채워요
-async function searchCategory({ category, center, area, pages, mood, apiKey }) {
+// 분위기·인원 단어가 있으면 "조용한 한식", "단체 한식"으로 먼저 찾고(앞에 보여줘요), 이어서 "한식"으로 찾아 채워요
+async function searchCategory({ category, center, area, pages, moodWords, radius, apiKey }) {
   const places = [];
-  if (mood) {
-    const moodResult = await searchKeyword({ keyword: `${mood} ${CATEGORY_QUERIES[category]}`, category, center, area, pages: 1, apiKey });
+  const seen = new Set();
+  const add = (list, mood) => {
+    for (const place of list) {
+      if (seen.has(place.id)) continue;
+      seen.add(place.id);
+      places.push(mood ? { ...place, moodMatch: true, mood } : place);
+    }
+  };
+  for (const mood of moodWords) {
+    const moodResult = await searchKeyword({ keyword: `${mood} ${CATEGORY_QUERIES[category]}`, category, center, area, pages: 1, radius, apiKey });
     if (moodResult.error) return moodResult;
-    places.push(...moodResult.places.map((place) => ({ ...place, moodMatch: true })));
+    add(moodResult.places, mood);
   }
-  const plain = await searchKeyword({ keyword: CATEGORY_QUERIES[category], category, center, area, pages, apiKey });
+  const plain = await searchKeyword({ keyword: CATEGORY_QUERIES[category], category, center, area, pages, radius, apiKey });
   if (plain.error) return plain;
-  const seen = new Set(places.map((place) => place.id));
-  places.push(...plain.places.filter((place) => !seen.has(place.id)));
+  add(plain.places, '');
   return { places };
 }
 
 // 검색어 하나로 카카오 장소 검색 (pages쪽까지)
-async function searchKeyword({ keyword, category, center, area, pages, apiKey }) {
+async function searchKeyword({ keyword, category, center, area, pages, radius, apiKey }) {
   const places = [];
   for (let page = 1; page <= pages; page += 1) {
     const params = new URLSearchParams({
@@ -158,7 +172,7 @@ async function searchKeyword({ keyword, category, center, area, pages, apiKey })
       category_group_code: category === 'cafe' ? 'CE7' : 'FD6', // FD6 음식점, CE7 카페
       x: String(center.lng),
       y: String(center.lat),
-      radius: String(SEARCH_RADIUS),
+      radius: String(radius),
       size: '15',
       page: String(page),
     });

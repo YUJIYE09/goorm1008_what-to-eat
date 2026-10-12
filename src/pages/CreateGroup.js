@@ -1,7 +1,14 @@
 // 모임 만들기 화면: 조건을 입력하고 검사한 뒤 저장 → 추천 화면으로 이동
 import { FilterForm } from '../components/FilterForm.js';
 import { validateGroup } from '../utils/validation.js';
-import { formatDate, escapeHtml, NEAR_ME, AREA_SEARCH, CATEGORY_LABELS } from '../utils/format.js';
+import {
+  formatDate,
+  escapeHtml,
+  NEAR_ME,
+  AREA_SEARCH,
+  CATEGORY_LABELS,
+  DEFAULT_RADIUS,
+} from '../utils/format.js';
 import { addGroup } from '../services/storage.js';
 import { getMyLocation } from '../services/placeService.js';
 import { parseConditions } from '../services/aiService.js';
@@ -111,6 +118,7 @@ export function mountCreateGroup() {
       name: formData.get('name') ?? '',
       area: formData.get('area') ?? '',
       areaSearch: formData.get('areaSearch') ?? '',
+      radius: formData.get('radius') ?? '',
       people: formData.get('people') ?? '',
       budget: formData.get('budget') ?? '',
       category: formData.getAll('category'), // 여러 개 선택 (예: ['korean', 'meat'])
@@ -129,6 +137,7 @@ export function mountCreateGroup() {
       // 직접 검색이면 적은 동네·역 이름이 지역이 돼요 (예: "을지로3가역")
       area: values.area === AREA_SEARCH ? values.areaSearch.trim() : values.area,
       people: Number(values.people),
+      radius: Number(values.radius) || DEFAULT_RADIUS, // 실제 식당을 찾을 거리 (m)
       budget: Number(values.budget),
       categories: values.category,
       category: values.category[0], // 예전 코드와 맞추기 위한 첫 번째 종류

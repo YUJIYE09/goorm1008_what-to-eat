@@ -25,6 +25,14 @@ export function groupCategories(group) {
   return list.filter((key) => key in CATEGORY_LABELS);
 }
 
+// 실제 식당을 찾을 거리 (m → 화면 글자)
+export const RADIUS_LABELS = {
+  500: '🚶 500m',
+  1000: '🚶 1km',
+  2000: '🚌 2km',
+};
+export const DEFAULT_RADIUS = 2000;
+
 export const ATMOSPHERE_LABELS = {
   casual: '😄 편안한',
   quiet: '🤫 조용한',

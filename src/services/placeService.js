@@ -2,7 +2,7 @@
 // - 카카오 장소 검색이 연결돼 있으면: 실제 식당 (서버 함수 /api/places 를 거쳐요)
 // - 연결 전이거나 실패하면: 예전 샘플 데이터
 import { restaurants as sampleRestaurants } from '../data/restaurants.js';
-import { groupCategories } from '../utils/format.js';
+import { groupCategories, DEFAULT_RADIUS } from '../utils/format.js';
 
 const cache = new Map(); // 같은 조건으로 다시 들어오면 다시 묻지 않아요
 
@@ -13,6 +13,8 @@ export async function getPlaces(group) {
     area: group.area,
     category: groupCategories(group).join(','),
     atmosphere: group.atmosphere ?? '', // 분위기는 검색어에 섞어서 비슷하게 찾아요
+    people: String(group.people ?? ''), // 8명 이상이면 단체석 있는 곳을 먼저 찾아요
+    radius: String(group.radius ?? DEFAULT_RADIUS), // 검색 거리 (m)
   });
   if (group.lat && group.lng) {
     params.set('lat', group.lat.toFixed(4)); // 소수 4자리 ≈ 10m (정확한 위치를 보내지 않아요)
