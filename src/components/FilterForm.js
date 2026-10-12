@@ -1,5 +1,16 @@
 // 모임 조건 입력 폼의 HTML을 만들어요 (이벤트 연결은 CreateGroup.js에서)
-import { AREAS, NEAR_ME, AREA_SEARCH, AREA_SEARCH_MAX, CATEGORY_LABELS, ATMOSPHERE_LABELS } from '../utils/format.js';
+import {
+  AREAS,
+  NEAR_ME,
+  AREA_SEARCH,
+  AREA_SEARCH_MAX,
+  CATEGORY_LABELS,
+  ATMOSPHERE_LABELS,
+  RADIUS_LABELS,
+  DEFAULT_RADIUS,
+  SORT_LABELS,
+  DEFAULT_SORT,
+} from '../utils/format.js';
 
 // 칸 아래에 보여줄 오류 메시지 자리 (처음엔 비어 있음)
 function errorSlot(name) {
@@ -8,12 +19,13 @@ function errorSlot(name) {
 
 // 버튼 묶음을 "칩" 모양으로 만들기
 // multiple이 true면 여러 개 고를 수 있는 checkbox, 아니면 하나만 고르는 radio
-function chipGroup(name, legend, labels, { multiple = false } = {}) {
+function chipGroup(name, legend, labels, { multiple = false, checked = null } = {}) {
   const chips = Object.entries(labels)
     .map(
       ([value, label]) => `
         <label class="chip">
-          <input type="${multiple ? 'checkbox' : 'radio'}" name="${name}" value="${value}" />
+          <input type="${multiple ? 'checkbox' : 'radio'}" name="${name}" value="${value}"
+            ${String(value) === String(checked) ? 'checked' : ''} />
           <span>${label}</span>
         </label>`
     )
@@ -54,22 +66,8 @@ export function FilterForm() {
         ${errorSlot('area')}
       </div>
 
-      <div class="field-row">
-        <div class="field">
-          <label class="field__label" for="people">인원수 (명)</label>
-          <input class="input" id="people" name="people" type="number" inputmode="numeric"
-            min="1" max="100" placeholder="예: 6" aria-describedby="people-error" />
-          ${errorSlot('people')}
-        </div>
-
-        <div class="field">
-          <label class="field__label" for="budget">1인 예산 (원)</label>
-          <input class="input" id="budget" name="budget" type="number" inputmode="numeric"
-            min="1000" max="1000000" step="1000" placeholder="예: 30000"
-            aria-describedby="budget-error" />
-          ${errorSlot('budget')}
-        </div>
-      </div>
+      ${chipGroup('radius', '거리 (역·내 위치에서 직선거리)', RADIUS_LABELS, { checked: DEFAULT_RADIUS })}
+      ${chipGroup('sort', '정렬', SORT_LABELS, { checked: DEFAULT_SORT })}
 
       ${chipGroup('category', '음식 종류', CATEGORY_LABELS, { multiple: true })}
       ${chipGroup('atmosphere', '분위기', ATMOSPHERE_LABELS)}

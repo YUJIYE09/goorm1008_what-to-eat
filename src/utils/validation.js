@@ -25,21 +25,6 @@ export function validateGroup(values) {
     errors.area = '지역을 선택해주세요.';
   }
 
-  // 빈칸이면 Number('')가 0이 되므로 먼저 빈칸인지 확인해요
-  const people = Number(values.people);
-  if (values.people === '') {
-    errors.people = '인원수를 입력해주세요.';
-  } else if (!Number.isInteger(people) || people < 1 || people > 100) {
-    errors.people = '인원은 1~100명 사이로 입력해주세요.';
-  }
-
-  const budget = Number(values.budget);
-  if (values.budget === '') {
-    errors.budget = '1인 예산을 입력해주세요.';
-  } else if (!Number.isFinite(budget) || budget < 1000 || budget > 1000000) {
-    errors.budget = '예산은 1,000~1,000,000원 사이로 입력해주세요.';
-  }
-
   // 음식 종류는 여러 개 고를 수 있어요 (배열). 하나 이상 골라야 해요
   const categories = Array.isArray(values.category) ? values.category : [values.category];
   if (categories.length === 0 || !categories.every((key) => key in CATEGORY_LABELS)) {

@@ -10,11 +10,13 @@ import { recommendRestaurants } from '../services/recommendation.js';
 import { getPlaces } from '../services/placeService.js';
 import { RestaurantCard } from '../components/RestaurantCard.js';
 import {
-  formatPrice,
   escapeHtml,
   CATEGORY_LABELS,
   ATMOSPHERE_LABELS,
   groupCategories,
+  DEFAULT_RADIUS,
+  SORT_LABELS,
+  DEFAULT_SORT,
 } from '../utils/format.js';
 
 let shown = []; // 지금 화면에 보이는 식당들 (후보에 담을 때 정보를 찾으려고)
@@ -62,7 +64,7 @@ export async function Recommendations() {
   const header = `
       <h1 class="page__title">${escapeHtml(group.name)}</h1>
       <p class="summary">
-        ${escapeHtml(group.area)} · ${group.people}명 · ${formatPrice(group.budget)}
+        ${escapeHtml(group.area)} · 반경 ${radiusText(group.radius)} · ${SORT_LABELS[group.sort] ?? SORT_LABELS[DEFAULT_SORT]}
       </p>
       <p class="summary summary--sub">
         ${groupCategories(group).map((key) => CATEGORY_LABELS[key]).join(', ')} · ${ATMOSPHERE_LABELS[group.atmosphere]}
@@ -132,18 +134,23 @@ const SAMPLE_NOTICE = {
   failed: '⚠️ 실제 식당을 불러오지 못해 가상의 샘플 식당을 보여드려요. 잠시 후 다시 시도해 주세요.',
 };
 
+// 검색 거리 글자 (예: 500 → 500m, 2000 → 2km)
+function radiusText(radius = DEFAULT_RADIUS) {
+  return radius >= 1000 ? `${radius / 1000}km` : `${radius}m`;
+}
+
 // 실제 식당 목록 (카카오 검색 결과 순서 = 검색어와 잘 맞는 순)
 function PlaceList(group, places, candidateIds, header) {
   const where = group.area === '내 주변' ? '내 주변' : `${escapeHtml(group.area)} 근처`;
   const body =
     places.length > 0
-      ? `<p class="result-count">${where} 식당 <strong>${places.length}곳</strong> · 반경 2km</p>
+      ? `<p class="result-count">${where} 식당 <strong>${places.length}곳</strong> · 반경 ${radiusText(group.radius)}</p>
          ${
            places.some((p) => p.moodMatch)
-             ? `<p class="hint">✨ 표시는 "${ATMOSPHERE_LABELS[group.atmosphere]}" 분위기를 검색어에 넣어 찾은 식당이에요. 앞쪽에 먼저 보여드려요.</p>`
+             ? `<p class="hint">✨·👥 표시는 고른 분위기에 맞춰 "조용한", "단체" 같은 말을 검색어에 넣어 찾은 식당이에요.</p>`
              : ''
          }
-         <p class="hint">💰 1인 예산 ${formatPrice(group.budget)}: 카카오는 가격을 알려주지 않아서, 가격·평점·영업시간은 카드의 카카오맵 링크에서 확인해 주세요.</p>
+         <p class="hint">가격·평점·영업시간은 카드의 카카오맵 링크에서 확인할 수 있어요.</p>
          <div class="card-list">${places
            .map((p) => RestaurantCard(p, { isCandidate: candidateIds.includes(p.id) }))
            .join('')}</div>`

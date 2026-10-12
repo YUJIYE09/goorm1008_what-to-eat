@@ -25,6 +25,21 @@ export function groupCategories(group) {
   return list.filter((key) => key in CATEGORY_LABELS);
 }
 
+// 실제 식당을 찾을 거리 (m → 화면 글자)
+export const RADIUS_LABELS = {
+  500: '🚶 500m',
+  1000: '🚶 1km',
+  2000: '🚌 2km',
+};
+export const DEFAULT_RADIUS = 2000;
+
+// 실제 식당 정렬 (카카오 검색이 지원하는 두 가지)
+export const SORT_LABELS = {
+  accuracy: '⭐ 추천 순',
+  distance: '📍 가까운 순',
+};
+export const DEFAULT_SORT = 'accuracy';
+
 export const ATMOSPHERE_LABELS = {
   casual: '😄 편안한',
   quiet: '🤫 조용한',

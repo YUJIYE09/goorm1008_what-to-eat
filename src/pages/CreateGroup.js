@@ -1,7 +1,16 @@
 // 모임 만들기 화면: 조건을 입력하고 검사한 뒤 저장 → 추천 화면으로 이동
 import { FilterForm } from '../components/FilterForm.js';
 import { validateGroup } from '../utils/validation.js';
-import { formatDate, escapeHtml, NEAR_ME, AREA_SEARCH, CATEGORY_LABELS } from '../utils/format.js';
+import {
+  formatDate,
+  escapeHtml,
+  NEAR_ME,
+  AREA_SEARCH,
+  CATEGORY_LABELS,
+  DEFAULT_RADIUS,
+  SORT_LABELS,
+  DEFAULT_SORT,
+} from '../utils/format.js';
 import { addGroup } from '../services/storage.js';
 import { getMyLocation } from '../services/placeService.js';
 import { parseConditions } from '../services/aiService.js';
@@ -38,8 +47,6 @@ function fillForm(form, conditions) {
   };
   setValue('name', conditions.name);
   setValue('area', conditions.area);
-  setValue('people', conditions.people);
-  setValue('budget', conditions.budget);
   ['category', 'atmosphere'].forEach((name) => {
     const input = form.querySelector(`[name="${name}"][value="${conditions[name]}"]`);
     if (input) input.checked = true;
@@ -88,7 +95,7 @@ function mountTalk(form) {
       </div>`;
 
     // 비어 있는 첫 칸으로 이동 (없으면 추천 버튼으로)
-    const empty = ['name', 'area', 'people', 'budget'].find(
+    const empty = ['name', 'area'].find(
       (name) => !form.querySelector(`[name="${name}"]`).value
     );
     (empty ? form.querySelector(`[name="${empty}"]`) : form.querySelector('[type="submit"]')).focus();
@@ -111,8 +118,8 @@ export function mountCreateGroup() {
       name: formData.get('name') ?? '',
       area: formData.get('area') ?? '',
       areaSearch: formData.get('areaSearch') ?? '',
-      people: formData.get('people') ?? '',
-      budget: formData.get('budget') ?? '',
+      radius: formData.get('radius') ?? '',
+      sort: formData.get('sort') ?? '',
       category: formData.getAll('category'), // 여러 개 선택 (예: ['korean', 'meat'])
       atmosphere: formData.get('atmosphere') ?? '',
     };
@@ -128,8 +135,8 @@ export function mountCreateGroup() {
       name: values.name.trim(),
       // 직접 검색이면 적은 동네·역 이름이 지역이 돼요 (예: "을지로3가역")
       area: values.area === AREA_SEARCH ? values.areaSearch.trim() : values.area,
-      people: Number(values.people),
-      budget: Number(values.budget),
+      radius: Number(values.radius) || DEFAULT_RADIUS, // 실제 식당을 찾을 거리 (m)
+      sort: values.sort in SORT_LABELS ? values.sort : DEFAULT_SORT, // 추천 순 / 가까운 순
       categories: values.category,
       category: values.category[0], // 예전 코드와 맞추기 위한 첫 번째 종류
       atmosphere: values.atmosphere,
@@ -175,7 +182,7 @@ function mountAreaSearch(form) {
 
 // 각 칸 아래에 오류 메시지를 보여주고, 첫 번째 오류 칸으로 이동해요
 function showErrors(form, errors) {
-  const fields = ['name', 'area', 'people', 'budget', 'category', 'atmosphere'];
+  const fields = ['name', 'area', 'category', 'atmosphere'];
 
   fields.forEach((field) => {
     const message = errors[field] ?? '';

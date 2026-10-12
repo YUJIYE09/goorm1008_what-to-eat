@@ -56,7 +56,7 @@ export function clearData(key) {
 // 저장된 데이터가 깨졌는지 간단히 확인 (필요한 값이 다 있는지)
 function isValidGroup(group) {
   return Boolean(
-    group && group.id && group.name && group.area && group.people > 0 && group.budget > 0
+    group && group.id && group.name && group.area
   );
 }
 
