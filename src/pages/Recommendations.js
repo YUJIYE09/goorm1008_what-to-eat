@@ -138,7 +138,12 @@ function PlaceList(group, places, candidateIds, header) {
   const body =
     places.length > 0
       ? `<p class="result-count">${where} 식당 <strong>${places.length}곳</strong> · 반경 2km</p>
-         <p class="hint">가격·평점·영업시간은 카드의 카카오맵 링크에서 확인할 수 있어요.</p>
+         ${
+           places.some((p) => p.moodMatch)
+             ? `<p class="hint">✨ 표시는 "${ATMOSPHERE_LABELS[group.atmosphere]}" 분위기를 검색어에 넣어 찾은 식당이에요. 앞쪽에 먼저 보여드려요.</p>`
+             : ''
+         }
+         <p class="hint">💰 1인 예산 ${formatPrice(group.budget)}: 카카오는 가격을 알려주지 않아서, 가격·평점·영업시간은 카드의 카카오맵 링크에서 확인해 주세요.</p>
          <div class="card-list">${places
            .map((p) => RestaurantCard(p, { isCandidate: candidateIds.includes(p.id) }))
            .join('')}</div>`

@@ -96,7 +96,14 @@ function PlaceCard(place, { isCandidate }) {
           <h2 class="card__title">${name}</h2>
           ${place.distance ? `<span class="card__distance">${formatDistance(place.distance)}</span>` : ''}
         </div>
-        ${place.categoryName ? `<ul class="tag-list"><li class="tag">${escapeHtml(place.categoryName)}</li></ul>` : ''}
+        ${
+          place.categoryName || place.moodMatch
+            ? `<ul class="tag-list">
+                 ${place.moodMatch ? '<li class="tag tag--mood">✨ 분위기 검색</li>' : ''}
+                 ${place.categoryName ? `<li class="tag">${escapeHtml(place.categoryName)}</li>` : ''}
+               </ul>`
+            : ''
+        }
         <ul class="card__meta card__meta--place">
           <li><span aria-hidden="true">📍</span> ${escapeHtml(place.address)}</li>
           ${place.phone ? `<li><span aria-hidden="true">📞</span> <a class="link" href="tel:${escapeHtml(place.phone)}">${escapeHtml(place.phone)}</a></li>` : ''}

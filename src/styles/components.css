@@ -773,3 +773,9 @@ fieldset:disabled .vote-card {
   font-weight: 400;
   color: var(--color-text-muted);
 }
+
+/* 분위기를 검색어에 넣어 찾은 식당 표시 */
+.tag--mood {
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+}

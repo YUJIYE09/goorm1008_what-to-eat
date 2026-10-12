@@ -9,7 +9,11 @@ const cache = new Map(); // 같은 조건으로 다시 들어오면 다시 묻�
 // 모임 조건으로 식당 목록 가져오기
 // 돌려주는 값: { source: 'kakao' | 'sample', places, reason? }
 export async function getPlaces(group) {
-  const params = new URLSearchParams({ area: group.area, category: groupCategories(group).join(',') });
+  const params = new URLSearchParams({
+    area: group.area,
+    category: groupCategories(group).join(','),
+    atmosphere: group.atmosphere ?? '', // 분위기는 검색어에 섞어서 비슷하게 찾아요
+  });
   if (group.lat && group.lng) {
     params.set('lat', group.lat.toFixed(4)); // 소수 4자리 ≈ 10m (정확한 위치를 보내지 않아요)
     params.set('lng', group.lng.toFixed(4));
