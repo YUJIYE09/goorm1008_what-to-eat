@@ -67,7 +67,7 @@ export async function Recommendations() {
         ${escapeHtml(group.area)} · 반경 ${radiusText(group.radius)} · ${SORT_LABELS[group.sort] ?? SORT_LABELS[DEFAULT_SORT]}
       </p>
       <p class="summary summary--sub">
-        ${groupCategories(group).map((key) => CATEGORY_LABELS[key]).join(', ')} · ${ATMOSPHERE_LABELS[group.atmosphere]}
+        ${groupCategories(group).map((key) => CATEGORY_LABELS[key]).join(', ')}${ATMOSPHERE_LABELS[group.atmosphere] ? ` · ${ATMOSPHERE_LABELS[group.atmosphere]}` : ''}
         ${avoidLabel(group.avoid)}
         · <a href="#/create" class="link">조건 변경</a>
       </p>`;

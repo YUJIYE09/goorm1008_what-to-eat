@@ -84,6 +84,8 @@ function CandidateButton(id, isCandidate) {
 // 검색어에 넣어 찾은 말 → 카드 표시 (예: "단체" → 👥 단체석 검색)
 function moodTag(mood) {
   if (mood === '단체') return '👥 단체석 검색';
+  if (mood === '룸') return '🚪 룸 검색';
+  if (mood === '가성비') return '💰 가성비 검색';
   return mood ? `✨ ${escapeHtml(mood)} 검색` : '✨ 분위기 검색';
 }
 
