@@ -33,6 +33,13 @@ export const RADIUS_LABELS = {
 };
 export const DEFAULT_RADIUS = 2000;
 
+// 실제 식당 정렬 (카카오 검색이 지원하는 두 가지)
+export const SORT_LABELS = {
+  accuracy: '⭐ 추천 순',
+  distance: '📍 가까운 순',
+};
+export const DEFAULT_SORT = 'accuracy';
+
 export const ATMOSPHERE_LABELS = {
   casual: '😄 편안한',
   quiet: '🤫 조용한',

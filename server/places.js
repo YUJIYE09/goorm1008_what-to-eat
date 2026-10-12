@@ -35,7 +35,7 @@ const ATMOSPHERE_WORDS = {
 const AREA_SEARCH_MAX = 20; // 직접 검색한 동네 이름 최대 글자 수
 const RADIUS_OPTIONS = [500, 1000, 2000]; // 고를 수 있는 거리 (m)
 const DEFAULT_RADIUS = 2000; // 거리를 안 골랐으면 2km 안
-const GROUP_SEAT_PEOPLE = 8; // 이 인원 이상이면 단체석 있는 곳을 먼저 찾아요
+const SORTS = ['accuracy', 'distance']; // 카카오 정렬: 추천(검색어와 잘 맞는) 순 / 가까운 순
 const PAGES = 2; // 한 번에 15곳 × 2쪽 = 최대 30곳
 
 // 한국 안의 좌표인지 대략 확인 (아무 좌표나 넣어 남의 키를 쓰지 못하게)
@@ -114,35 +114,47 @@ export async function searchPlaces(query, apiKey) {
   // 검색 거리 (정해진 값이 아니면 2km)
   const radius = RADIUS_OPTIONS.includes(Number(query.radius)) ? Number(query.radius) : DEFAULT_RADIUS;
 
-  // 검색어 앞에 붙일 말: 분위기 단어 + 인원이 많으면 "단체" (중복은 한 번만)
-  const moods = [ATMOSPHERE_WORDS[String(query.atmosphere ?? '')]];
-  if (Number(query.people) >= GROUP_SEAT_PEOPLE) moods.push('단체');
-  const moodWords = [...new Set(moods.filter(Boolean))];
+  // 정렬 (정해진 값이 아니면 추천 순)
+  const sort = SORTS.includes(query.sort) ? query.sort : 'accuracy';
+
+  // 검색어 앞에 붙일 분위기 단어 (없거나 모르는 값이면 붙이지 않아요)
+  const moodWords = [ATMOSPHERE_WORDS[String(query.atmosphere ?? '')]].filter(Boolean);
 
   // 종류가 하나면 2쪽(최대 30곳), 여러 개면 종류마다 1쪽(15곳)씩 검색해요
   const pages = categories.length === 1 ? PAGES : 1;
-  const places = [];
+  const lists = [];
   for (const category of categories) {
-    const result = await searchCategory({ category, center, area, pages, moodWords, radius, apiKey });
+    const result = await searchCategory({ category, center, area, pages, moodWords, radius, sort, apiKey });
     if (result.error) return { status: 502, body: { error: result.error } };
-    places.push(...result.places);
+    lists.push(result.places);
   }
 
-  if (categories.length === 1) return { status: 200, body: { places } };
+  return { status: 200, body: { places: combine(lists, sort) } };
+}
 
-  // 여러 종류: 같은 식당은 한 번만, 분위기 검색에 나온 곳 먼저, 그다음 가까운 순으로 섞어요
-  const unique = [...new Map(places.map((place) => [place.id, place])).values()];
-  unique.sort(
-    (a, b) =>
-      (b.moodMatch ? 1 : 0) - (a.moodMatch ? 1 : 0) ||
-      (a.distance ?? Infinity) - (b.distance ?? Infinity)
-  );
-  return { status: 200, body: { places: unique } };
+// 종류별 검색 결과를 한 목록으로 합쳐요 (같은 식당은 한 번만)
+// - 가까운 순: 전부 거리순으로
+// - 추천 순: 분위기 검색에 나온 곳 먼저, 그다음 종류별로 번갈아 하나씩 (한식1, 고기1, 한식2, ...)
+function combine(lists, sort) {
+  const seen = new Set();
+  const unique = (list) => list.filter((place) => !seen.has(place.id) && seen.add(place.id));
+
+  if (sort === 'distance') {
+    return unique(lists.flat()).sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+  }
+  if (lists.length === 1) return unique(lists[0]);
+
+  const interleaved = [];
+  for (let i = 0; i < Math.max(...lists.map((list) => list.length)); i += 1) {
+    for (const list of lists) if (list[i]) interleaved.push(list[i]);
+  }
+  const ordered = unique(interleaved);
+  return [...ordered.filter((place) => place.moodMatch), ...ordered.filter((place) => !place.moodMatch)];
 }
 
 // 음식 종류 하나를 카카오에서 검색해요
 // 분위기·인원 단어가 있으면 "조용한 한식", "단체 한식"으로 먼저 찾고(앞에 보여줘요), 이어서 "한식"으로 찾아 채워요
-async function searchCategory({ category, center, area, pages, moodWords, radius, apiKey }) {
+async function searchCategory({ category, center, area, pages, moodWords, radius, sort, apiKey }) {
   const places = [];
   const seen = new Set();
   const add = (list, mood) => {
@@ -153,18 +165,18 @@ async function searchCategory({ category, center, area, pages, moodWords, radius
     }
   };
   for (const mood of moodWords) {
-    const moodResult = await searchKeyword({ keyword: `${mood} ${CATEGORY_QUERIES[category]}`, category, center, area, pages: 1, radius, apiKey });
+    const moodResult = await searchKeyword({ keyword: `${mood} ${CATEGORY_QUERIES[category]}`, category, center, area, pages: 1, radius, sort, apiKey });
     if (moodResult.error) return moodResult;
     add(moodResult.places, mood);
   }
-  const plain = await searchKeyword({ keyword: CATEGORY_QUERIES[category], category, center, area, pages, radius, apiKey });
+  const plain = await searchKeyword({ keyword: CATEGORY_QUERIES[category], category, center, area, pages, radius, sort, apiKey });
   if (plain.error) return plain;
   add(plain.places, '');
   return { places };
 }
 
 // 검색어 하나로 카카오 장소 검색 (pages쪽까지)
-async function searchKeyword({ keyword, category, center, area, pages, radius, apiKey }) {
+async function searchKeyword({ keyword, category, center, area, pages, radius, sort, apiKey }) {
   const places = [];
   for (let page = 1; page <= pages; page += 1) {
     const params = new URLSearchParams({
@@ -173,6 +185,7 @@ async function searchKeyword({ keyword, category, center, area, pages, radius, a
       x: String(center.lng),
       y: String(center.lat),
       radius: String(radius),
+      sort, // accuracy(추천 순) 또는 distance(가까운 순)
       size: '15',
       page: String(page),
     });

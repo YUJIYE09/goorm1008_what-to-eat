@@ -8,6 +8,8 @@ import {
   ATMOSPHERE_LABELS,
   RADIUS_LABELS,
   DEFAULT_RADIUS,
+  SORT_LABELS,
+  DEFAULT_SORT,
 } from '../utils/format.js';
 
 // 칸 아래에 보여줄 오류 메시지 자리 (처음엔 비어 있음)
@@ -65,23 +67,7 @@ export function FilterForm() {
       </div>
 
       ${chipGroup('radius', '거리 (역·내 위치에서 직선거리)', RADIUS_LABELS, { checked: DEFAULT_RADIUS })}
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field__label" for="people">인원수 (명)</label>
-          <input class="input" id="people" name="people" type="number" inputmode="numeric"
-            min="1" max="100" placeholder="예: 6" aria-describedby="people-error" />
-          ${errorSlot('people')}
-        </div>
-
-        <div class="field">
-          <label class="field__label" for="budget">1인 예산 (원)</label>
-          <input class="input" id="budget" name="budget" type="number" inputmode="numeric"
-            min="1000" max="1000000" step="1000" placeholder="예: 30000"
-            aria-describedby="budget-error" />
-          ${errorSlot('budget')}
-        </div>
-      </div>
+      ${chipGroup('sort', '정렬', SORT_LABELS, { checked: DEFAULT_SORT })}
 
       ${chipGroup('category', '음식 종류', CATEGORY_LABELS, { multiple: true })}
       ${chipGroup('atmosphere', '분위기', ATMOSPHERE_LABELS)}
