@@ -25,11 +25,13 @@ const CATEGORY_QUERIES = {
 };
 
 // 분위기 → 검색어 앞에 붙일 말 (카카오는 분위기 정보를 주지 않아서 검색어로 비슷하게 찾아요)
-// 편안한(casual)은 보통 검색과 같아서 붙이지 않아요
+// 상관없어요(casual)는 보통 검색과 같아서 붙이지 않아요
 const ATMOSPHERE_WORDS = {
   quiet: '조용한',
   romantic: '데이트',
   group: '단체',
+  room: '룸',
+  value: '가성비',
 };
 
 const AREA_SEARCH_MAX = 20; // 직접 검색한 동네 이름 최대 글자 수

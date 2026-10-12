@@ -40,11 +40,15 @@ export const SORT_LABELS = {
 };
 export const DEFAULT_SORT = 'accuracy';
 
+// 실제 식당은 이 말을 검색어에 붙여 찾아요 (server/places.js ATMOSPHERE_WORDS)
+// casual·romantic은 예전 모임과 맞추려고 저장 값을 그대로 두고 이름만 바꿨어요
 export const ATMOSPHERE_LABELS = {
-  casual: '😄 편안한',
+  casual: '🙂 상관없어요',
   quiet: '🤫 조용한',
-  romantic: '🕯️ 분위기 있는',
-  group: '🎉 단체 모임',
+  romantic: '💕 데이트',
+  group: '🎉 단체·회식',
+  room: '🚪 룸 있는',
+  value: '💰 가성비',
 };
 
 // 30000 → "30,000원"
