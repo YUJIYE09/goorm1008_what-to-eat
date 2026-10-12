@@ -136,7 +136,7 @@ export function mountCreateGroup() {
       // 직접 검색이면 적은 동네·역 이름이 지역이 돼요 (예: "을지로3가역")
       area: values.area === AREA_SEARCH ? values.areaSearch.trim() : values.area,
       radius: Number(values.radius) || DEFAULT_RADIUS, // 실제 식당을 찾을 거리 (m)
-      sort: values.sort in SORT_LABELS ? values.sort : DEFAULT_SORT, // 추천 순 / 가까운 순
+      sort: values.sort in SORT_LABELS ? values.sort : DEFAULT_SORT, // 정확도 순 / 가까운 순
       categories: values.category,
       category: values.category[0], // 예전 코드와 맞추기 위한 첫 번째 종류
       atmosphere: values.atmosphere,
