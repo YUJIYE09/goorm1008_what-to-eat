@@ -766,3 +766,10 @@ fieldset:disabled .vote-card {
 .area-search[hidden] {
   display: none;
 }
+
+/* 칸 이름 옆 작은 안내 (예: "여러 개 선택 가능") */
+.field__hint {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}

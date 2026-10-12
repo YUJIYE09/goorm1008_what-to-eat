@@ -14,6 +14,7 @@ import {
   escapeHtml,
   CATEGORY_LABELS,
   ATMOSPHERE_LABELS,
+  groupCategories,
 } from '../utils/format.js';
 
 let shown = []; // 지금 화면에 보이는 식당들 (후보에 담을 때 정보를 찾으려고)
@@ -64,7 +65,7 @@ export async function Recommendations() {
         ${escapeHtml(group.area)} · ${group.people}명 · ${formatPrice(group.budget)}
       </p>
       <p class="summary summary--sub">
-        ${CATEGORY_LABELS[group.category]} · ${ATMOSPHERE_LABELS[group.atmosphere]}
+        ${groupCategories(group).map((key) => CATEGORY_LABELS[key]).join(', ')} · ${ATMOSPHERE_LABELS[group.atmosphere]}
         ${avoidLabel(group.avoid)}
         · <a href="#/create" class="link">조건 변경</a>
       </p>`;

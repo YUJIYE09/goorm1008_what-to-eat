@@ -18,6 +18,13 @@ export const CATEGORY_LABELS = {
   cafe: '☕ 카페',
 };
 
+// 모임의 음식 종류 목록 (여러 개 선택, v0.6)
+// 예전에 만든 모임은 category 하나만 있어서 목록으로 바꿔 줘요
+export function groupCategories(group) {
+  const list = Array.isArray(group?.categories) ? group.categories : [group?.category];
+  return list.filter((key) => key in CATEGORY_LABELS);
+}
+
 export const ATMOSPHERE_LABELS = {
   casual: '😄 편안한',
   quiet: '🤫 조용한',

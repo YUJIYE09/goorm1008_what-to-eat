@@ -40,8 +40,10 @@ export function validateGroup(values) {
     errors.budget = '예산은 1,000~1,000,000원 사이로 입력해주세요.';
   }
 
-  if (!(values.category in CATEGORY_LABELS)) {
-    errors.category = '음식 종류를 선택해주세요.';
+  // 음식 종류는 여러 개 고를 수 있어요 (배열). 하나 이상 골라야 해요
+  const categories = Array.isArray(values.category) ? values.category : [values.category];
+  if (categories.length === 0 || !categories.every((key) => key in CATEGORY_LABELS)) {
+    errors.category = '음식 종류를 하나 이상 선택해주세요.';
   }
 
   if (!(values.atmosphere in ATMOSPHERE_LABELS)) {

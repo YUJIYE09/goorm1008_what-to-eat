@@ -74,8 +74,9 @@ export async function searchPlaces(query, apiKey) {
     return { status: 503, body: { error: 'not_configured' } };
   }
 
-  const category = String(query.category ?? '');
-  if (!(category in CATEGORY_QUERIES)) {
+  // 음식 종류는 쉼표로 여러 개 올 수 있어요 (예: "korean,meat")
+  const categories = [...new Set(String(query.category ?? '').split(','))];
+  if (categories.length === 0 || !categories.every((key) => key in CATEGORY_QUERIES)) {
     return { status: 400, body: { error: 'bad_category' } };
   }
 
@@ -100,8 +101,27 @@ export async function searchPlaces(query, apiKey) {
     center = found.center;
   }
 
+  // 종류가 하나면 2쪽(최대 30곳), 여러 개면 종류마다 1쪽(15곳)씩 검색해요
+  const pages = categories.length === 1 ? PAGES : 1;
   const places = [];
-  for (let page = 1; page <= PAGES; page += 1) {
+  for (const category of categories) {
+    const result = await searchCategory({ category, center, area, pages, apiKey });
+    if (result.error) return { status: 502, body: { error: result.error } };
+    places.push(...result.places);
+  }
+
+  if (categories.length === 1) return { status: 200, body: { places } };
+
+  // 여러 종류: 같은 식당은 한 번만, 가까운 순으로 섞어서 보여줘요
+  const unique = [...new Map(places.map((place) => [place.id, place])).values()];
+  unique.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+  return { status: 200, body: { places: unique } };
+}
+
+// 음식 종류 하나를 카카오에서 검색해요
+async function searchCategory({ category, center, area, pages, apiKey }) {
+  const places = [];
+  for (let page = 1; page <= pages; page += 1) {
     const params = new URLSearchParams({
       query: CATEGORY_QUERIES[category],
       category_group_code: category === 'cafe' ? 'CE7' : 'FD6', // FD6 음식점, CE7 카페
@@ -117,13 +137,12 @@ export async function searchPlaces(query, apiKey) {
     });
     if (!response.ok) {
       console.error('카카오 검색 실패:', response.status, await response.text());
-      return { status: 502, body: { error: 'kakao_failed' } };
+      return { error: 'kakao_failed' };
     }
 
     const data = await response.json();
     places.push(...data.documents.map((doc) => toPlace(doc, { area, category })));
     if (data.meta.is_end) break; // 더 없으면 그만
   }
-
-  return { status: 200, body: { places } };
+  return { places };
 }
