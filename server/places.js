@@ -25,7 +25,7 @@ const CATEGORY_QUERIES = {
 };
 
 // 분위기 → 검색어 앞에 붙일 말 (카카오는 분위기 정보를 주지 않아서 검색어로 비슷하게 찾아요)
-// 상관없어요(casual)는 보통 검색과 같아서 붙이지 않아요
+// 분위기를 안 고르면(예전 모임의 casual 포함) 보통 검색과 같아요
 const ATMOSPHERE_WORDS = {
   quiet: '조용한',
   romantic: '데이트',

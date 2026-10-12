@@ -108,6 +108,7 @@ export function mountCreateGroup() {
   avoidList = [];
   mountTalk(form);
   mountAreaSearch(form);
+  mountAtmosphereToggle(form);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault(); // 페이지가 새로고침되지 않게 막기
@@ -166,6 +167,18 @@ export function mountCreateGroup() {
     addGroup(group);
 
     window.location.hash = '/recommendations';
+  });
+}
+
+// 분위기는 고른 칩을 한 번 더 누르면 선택이 풀려요 (상관없이 찾기)
+function mountAtmosphereToggle(form) {
+  form.querySelectorAll('[name="atmosphere"]').forEach((radio) => {
+    let wasChecked = false;
+    radio.closest('label').addEventListener('pointerdown', () => { wasChecked = radio.checked; });
+    radio.addEventListener('click', () => {
+      if (wasChecked) radio.checked = false;
+      wasChecked = false;
+    });
   });
 }
 

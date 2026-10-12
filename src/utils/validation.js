@@ -31,8 +31,9 @@ export function validateGroup(values) {
     errors.category = '음식 종류를 하나 이상 선택해주세요.';
   }
 
-  if (!(values.atmosphere in ATMOSPHERE_LABELS)) {
-    errors.atmosphere = '분위기를 선택해주세요.';
+  // 분위기는 골라도 되고 안 골라도 돼요 (안 고르면 상관없이 찾아요)
+  if (values.atmosphere && !(values.atmosphere in ATMOSPHERE_LABELS)) {
+    errors.atmosphere = '분위기를 다시 선택해주세요.';
   }
 
   return errors;

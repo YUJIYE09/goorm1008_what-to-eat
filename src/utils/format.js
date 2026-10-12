@@ -41,9 +41,8 @@ export const SORT_LABELS = {
 export const DEFAULT_SORT = 'accuracy';
 
 // 실제 식당은 이 말을 검색어에 붙여 찾아요 (server/places.js ATMOSPHERE_WORDS)
-// casual·romantic은 예전 모임과 맞추려고 저장 값을 그대로 두고 이름만 바꿨어요
+// 고르지 않으면 분위기 상관없이 찾아요. romantic은 예전 모임과 맞추려고 저장 값을 그대로 두고 이름만 바꿨어요
 export const ATMOSPHERE_LABELS = {
-  casual: '🙂 상관없어요',
   quiet: '🤫 조용한',
   romantic: '💕 데이트',
   group: '🎉 단체·회식',

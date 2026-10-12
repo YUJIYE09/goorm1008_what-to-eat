@@ -7,7 +7,7 @@ import { AREA_CENTERS } from './places.js';
 
 const AREAS = [...Object.keys(AREA_CENTERS), '내 주변'];
 const CATEGORIES = ['korean', 'japanese', 'chinese', 'western', 'meat', 'chicken', 'cafe'];
-const ATMOSPHERES = ['casual', 'quiet', 'romantic', 'group', 'room', 'value'];
+const ATMOSPHERES = ['quiet', 'romantic', 'group', 'room', 'value'];
 const MAX_TEXT = 300; // 너무 긴 글은 받지 않아요 (사용량 보호)
 
 // AI가 꼭 이 모양으로만 답하게 하는 틀 (모르는 값은 'unknown' 또는 0)
@@ -30,10 +30,10 @@ const SCHEMA = {
 const SYSTEM = `너는 모임 식당 추천 앱 "뭐먹지?"의 입력 도우미야.
 사용자가 쓴 문장에서 모임 조건을 뽑아 JSON으로만 답해.
 
-- area: ${AREAS.join(', ')} 중 하나. 홍대입구·연남·망원은 홍대, 서울숲·성수동은 성수, 송파·석촌호수는 잠실, 광화문·인사동·익선동은 종로처럼 가까운 곳으로 맞춰. "근처", "여기 주변"이면 "내 주변". 알 수 없으면 "unknown".
+- area: ${AREAS.join(', ')} 중 하나. 홍대입구·연남·망원은 홍대, 서울숲·성수동은 성수, 송파·석촌호수는 잠실, 광화문·인사동·익선동은 종로처럼 가까운 곳으로 맞춰. "근처", "여기 주변"이면 "내 주변". 말하지 않았거나 상관없다고 하면 "unknown".
 - category: korean(한식), japanese(일식), chinese(중식), western(양식), meat(고기), chicken(치킨), cafe(카페). 원하는 음식이 없으면 "unknown".
 - avoid: 못 먹거나 피하고 싶은 음식 종류. 예: "한 명은 고기를 못 먹어" → ["meat"]. avoid에 넣은 종류는 category로 고르지 마.
-- atmosphere: casual(상관없음, 편하게), quiet(조용한, 시끄럽지 않은), romantic(데이트, 분위기 있는), group(단체, 회식), room(룸, 상견례, 개별실), value(가성비, 저렴한). 알 수 없으면 "unknown".
+- atmosphere: quiet(조용한, 시끄럽지 않은), romantic(데이트, 분위기 있는), group(단체, 회식), room(룸, 상견례, 개별실), value(가성비, 저렴한). 알 수 없으면 "unknown".
 - budget은 1인 기준 원 단위. "3만원 정도"는 30000. 총액만 말하면 인원수로 나눠.
 - 문장에 없는 값을 지어내지 마.`;
 
